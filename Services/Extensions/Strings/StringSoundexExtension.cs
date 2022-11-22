@@ -21,7 +21,6 @@ namespace VAdvance.Services.Extensions.Strings
 				string str=Regex.Replace(value.Substring(1,value.Length-1),"[\\s]+","").ToUpper();
 				res+=value[0].ToUpper();
 				str=Regex.Replace(Regex.IsMatch(str,SoundexReferenceData.IgnoredRegex) ? Regex.Replace(str,SoundexReferenceData.IgnoredRegex,"") : str,"(.)\\1{1,}","$1");
-				var dev=str;
 				int i=0;
 				while(res.Length<Math.Min(4,str.Length+1))
 					res+=GetSoundexCodeFromCharacter(str[i++]);
