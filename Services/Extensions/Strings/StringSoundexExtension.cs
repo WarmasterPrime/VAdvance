@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using VAdvance.Services.Extensions.Strings.Data.Soundex;
 using VAdvance.Services.Extensions.Characters;
+using VAdvance.Services.Extensions.Strings.Data.Soundex;
 
 namespace VAdvance.Services.Extensions.Strings
 {
@@ -36,7 +36,5 @@ namespace VAdvance.Services.Extensions.Strings
 					return r.Value;
 			return '0';
 		}
-
-
 	}
 }

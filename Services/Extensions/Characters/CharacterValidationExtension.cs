@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace VAdvance.Services.Extensions.Characters
 {
@@ -101,6 +97,5 @@ namespace VAdvance.Services.Extensions.Characters
 		{
 			return value>32&&!value.IsWord();
 		}
-
 	}
 }

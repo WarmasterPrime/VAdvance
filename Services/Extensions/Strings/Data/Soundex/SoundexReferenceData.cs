@@ -4,10 +4,7 @@ namespace VAdvance.Services.Extensions.Strings.Data.Soundex
 {
 	public static class SoundexReferenceData
 	{
-
 		public static readonly string IgnoredRegex="[AEIOUWYHaeiouwyh]+";
-		//public static readonly string IgnoredRegex="[A-z]{1}([^AEIOUWYHaeiouwyh]+)[AEIOUWYHaeiouwyh]+";
-
 		public static readonly string[] Ignored={
 			"A","E","I","O","U","W","Y","H"
 		};
@@ -41,6 +38,5 @@ namespace VAdvance.Services.Extensions.Strings.Data.Soundex
 			{ "[MNmn]", '5' },
 			{ "[Rr]", '6' }
 		};
-
 	}
 }

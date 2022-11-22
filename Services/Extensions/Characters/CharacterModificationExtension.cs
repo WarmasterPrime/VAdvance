@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VAdvance.Services.Extensions.Characters;
-
-namespace VAdvance.Services.Extensions.Characters
+﻿namespace VAdvance.Services.Extensions.Characters
 {
 	public static class CharacterModificationExtension
 	{
@@ -27,8 +20,5 @@ namespace VAdvance.Services.Extensions.Characters
 		{
 			return value.IsUpper() ? (char)(value+32) : value;
 		}
-
-
-
 	}
 }
