@@ -8,7 +8,11 @@ namespace VAdvance.Services.Extensions.Strings
 {
 	public static class StringSoundexExtension
 	{
-
+		/// <summary>
+		/// Calculates the soundex from the string value.
+		/// </summary>
+		/// <param name="value">The string value that will be calculated.</param>
+		/// <returns>a <see cref="string">value</see> representing the soundex of the given value.</returns>
 		public static string Soundex(this string value)
 		{
 			string res=string.Empty;
