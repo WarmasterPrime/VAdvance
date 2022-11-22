@@ -15,6 +15,17 @@ namespace VAdvance.Services.Extensions.Arrays
 			return obj;
 		}
 
+		public static int[] Push(this int[] obj,int value)
+		{
+			if(obj!=null)
+			{
+				Array.Resize(ref obj,obj.Length+1);
+				obj[obj.Length-1]=value;
+			}
+			return obj;
+		}
+
+
 		
 
 	}
