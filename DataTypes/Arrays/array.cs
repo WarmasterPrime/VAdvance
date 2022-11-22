@@ -74,5 +74,9 @@ namespace VAdvance.DataTypes.Arrays
 			return (value!=null) && _Values.Any((item)=>item==value);
 		}
 
+		public IEnumerator GetEnumerator()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
