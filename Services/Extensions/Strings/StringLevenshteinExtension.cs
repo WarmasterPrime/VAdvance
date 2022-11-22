@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using VAdvance.Services.Extensions.Arrays;
 
 namespace VAdvance.Services.Extensions.Strings
 {
@@ -23,7 +21,7 @@ namespace VAdvance.Services.Extensions.Strings
 			{
 				int res=str[0]!=value[0] ? 1 : 0;
 				int char_length=Math.Min(str.Length,value.Length);
-				List<int> character_indexes=GetCharacterIndexes(str,value,char_length);
+				int[] character_indexes=GetCharacterIndexes(str,value,char_length);
 				foreach(int i in character_indexes)
 					if(i>0 && i<char_length && value[i]!=str[i])
 						res+=value[i-1]==str[i-1] && value[i+1]==str[i+1] ? replacement_cost : value[i-1]==str[i-1] && value[i]==str[i+1] ? insertion_cost : deletion_cost;
@@ -53,9 +51,7 @@ namespace VAdvance.Services.Extensions.Strings
 			int[] character_indexes={ };
 			for(int i = 0;i<max_length;i++)
 				if(first_value[i]!=second_value[i])
-				{
 					character_indexes=character_indexes.Push(i);
-				}
 			return character_indexes;
 		}
 
