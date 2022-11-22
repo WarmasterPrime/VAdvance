@@ -30,7 +30,11 @@ namespace VAdvance.Services.Extensions.Strings
 			}
 			return res;
 		}
-
+		/// <summary>
+		/// Gets the soundex code from the given character value.
+		/// </summary>
+		/// <param name="value">The character that will be checked.</param>
+		/// <returns>a <see cref="char">value</see> representing the soundex code.</returns>
 		public static char GetSoundexCodeFromCharacter(char value)
 		{
 			string v=value.ToString();
