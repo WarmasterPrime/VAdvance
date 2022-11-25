@@ -1,0 +1,459 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using VAdvance.Services.Extensions.Arrays;
+using VAdvance.Services.Extensions.Objects;
+using VAdvance.Services.Extensions.Strings;
+
+namespace VAdvance.DataTypes.Enumerable
+{
+	public class Varray : IEnumerable
+	{
+
+		public readonly Dictionary<dynamic,dynamic> DictionaryItems=new Dictionary<dynamic, dynamic>();
+		private dynamic[] ListItems={ };
+		private bool IsAssociative=false;
+		
+		public dynamic[] Keys
+		{
+			get
+			{
+				return IsAssociative ? DictionaryItems.Keys.ToArray() : (dynamic)ListItems.GetKeysULong();
+			}
+		}
+
+		public dynamic[] Values
+		{
+			get
+			{
+				return IsAssociative ? DictionaryItems.Values.ToArray() : ListItems;
+			}
+		}
+		/// <summary>
+		/// The number of items within the array.
+		/// </summary>
+		public ulong Count
+		{
+			get
+			{
+				return IsAssociative ? (ulong)DictionaryItems.LongCount() : (ulong)ListItems.Length;
+			}
+		}
+		/// <summary>
+		/// The number of items within the array.
+		/// </summary>
+		public int Length
+		{
+			get
+			{
+				return (int)Count;
+			}
+		}
+		/// <summary>
+		/// Returns an array of dictionary consisting of the array contents.
+		/// </summary>
+		public dynamic Items
+		{
+			get
+			{
+				if(IsAssociative)
+					return DictionaryItems;
+				return ListItems;
+			}
+		}
+		/// <summary>
+		/// Gets/Sets the value at a given index/location within the array.
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns></returns>
+		public dynamic this[dynamic index]
+		{
+			get
+			{
+				if(IsAssociative)
+					return DictionaryItems.ContainsKey(index) ? DictionaryItems[index] : null;
+				return ((object)index).IsNumeric() && index>-1&&index<ListItems.Length ? ListItems[index] : null;
+			}
+			set
+			{
+				if(((object)index).IsNumeric())
+					Insert(index,value);
+				else
+					Add(index,value);
+			}
+		}
+		/// <summary>
+		/// Adds a new value to the array.
+		/// </summary>
+		/// <param name="value"></param>
+		public void Add(dynamic value)
+		{
+			if(IsAssociative)
+			{
+				Array.Resize(ref ListItems,DictionaryItems.Count);
+				ulong i=0;
+				foreach(KeyValuePair<dynamic,dynamic> sel in DictionaryItems)
+				{
+					ListItems[i]=sel.Value;
+					i++;
+				}
+				IsAssociative=false;
+			}
+			else
+			{
+				Array.Resize(ref ListItems,ListItems.Length+1);
+				ListItems[ListItems.Length-1]=value;
+			}
+		}
+		/// <summary>
+		/// Adds a new key-value pair to the array.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="value"></param>
+		/// <exception cref="ArgumentException"></exception>
+		public void Add(dynamic key,dynamic value)
+		{
+			if(IsAssociative)
+			{
+				if(!DictionaryItems.ContainsKey(key))
+					DictionaryItems.Add(key,value);
+			}
+			else
+			{
+				if(((object)key).IsNumeric())
+					Insert(key,value);
+				else
+				{
+					IsAssociative=true;
+					DictionaryItems.Clear();
+					for(ulong i = 0;i<(ulong)ListItems.Length;i++)
+						DictionaryItems.Add(i,ListItems[i]);
+					if(!DictionaryItems.ContainsKey(key))
+						DictionaryItems.Add(key,value);
+					else
+						throw new ArgumentException("The specified key already exists within the dictionary.");
+				}
+			}
+		}
+		/// <summary>
+		/// Inserts a given value at a specified location within the array.
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="value"></param>
+		public void Insert(dynamic index,dynamic value)
+		{
+			if(!IsAssociative && ((((object)index).IsNumeric()) && index>-1))
+			{
+				Array.Resize(ref ListItems,index>ListItems.Length+1 ? index+1 : ListItems.Length+1);
+				dynamic[] tmp=new dynamic[ListItems.Length];
+				int offset=0;
+				for(int i=0;i<ListItems.Length;i++)
+				{
+					if(i==index)
+					{
+						tmp[i]=value;
+						offset++;
+					}
+					else
+						tmp[i]=ListItems[i-offset];
+				}
+				ListItems=tmp;
+			}
+		}
+		/// <summary>
+		/// Appends the given value to the array.
+		/// </summary>
+		/// <param name="value"></param>
+		public void Push(dynamic value)
+		{
+			if(IsAssociative)
+				Add(value);
+			else
+			{
+				if(!DictionaryItems.ContainsKey(DictionaryItems.Count))
+					DictionaryItems.Add(value,value);
+				else
+					DictionaryItems[DictionaryItems.Last().Key.ToString()+DictionaryItems.Count.ToString()]=value;
+			}
+		}
+		/// <summary>
+		/// Adds the key-value pair to the array and converts the array if the key data-type has changed from the existing data-types.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="value"></param>
+		public void Push(dynamic key,dynamic value)
+		{
+			Add(key,value);
+		}
+		/// <summary>
+		/// Determines if the key exists within the array.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public bool ContainsKey(dynamic key)
+		{
+			if(IsAssociative)
+				return DictionaryItems.ContainsKey(key);
+			return Contains(key);
+		}
+		/// <summary>
+		/// Determines if the value exists within the array.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public bool Contains(dynamic value)
+		{
+			if(IsAssociative)
+				return DictionaryItems.ContainsKey(value) || DictionaryItems.ContainsValue(value);
+			return ContainsValue(value);
+		}
+		/// <summary>
+		/// Determines if the value exists within the array.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public bool ContainsValue(dynamic value)
+		{
+			if(IsAssociative)
+				return DictionaryItems.ContainsValue(value);
+			else
+				for(int i=0;i<ListItems.Length;i++)
+					if(ListItems[i]==value)
+						return true;
+			return false;
+		}
+		/// <summary>
+		/// Gets the index or key from a given value.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns>the <see cref="long">index</see> of a non-associative array, or the key of the given value.</returns>
+		public dynamic IndexOf(dynamic value)
+		{
+			if(IsAssociative)
+				foreach(KeyValuePair<dynamic,dynamic> sel in DictionaryItems)
+					if(sel.Value==value)
+						return sel;
+			else
+				for(long i=0;i<ListItems.Length;i++)
+					if(ListItems[i]==value)
+						return i;
+			return -1;
+		}
+		/// <summary>
+		/// Removes the given key if it was found within the Varray items.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public bool RemoveKey(dynamic key)
+		{
+			return IsAssociative && DictionaryItems.Remove(key);
+		}
+		/// <summary>
+		/// Removes a given key or value that is located within the Varray items.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public bool Remove(dynamic value)
+		{
+			if(IsAssociative)
+				return DictionaryItems.ContainsValue(value) ? DictionaryItems.Remove(IndexOf(value)) : RemoveKey(value);
+			else if(Contains(value))
+			{
+				dynamic[] tmp={ };
+				foreach(dynamic sel in ListItems)
+					if(sel!=value)
+					{
+						Array.Resize(ref tmp,tmp.Length+1);
+						tmp[tmp.Length-1]=sel;
+					}
+				return true;
+			}
+			return false;
+		}
+		/// <summary>
+		/// Purges the contents of the array.
+		/// </summary>
+		public void Clear()
+		{
+			Array.Clear(ListItems,0,ListItems.Length);
+			DictionaryItems.Clear();
+		}
+		/// <summary>
+		/// Generates a JSON string equivalent of this array object.
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			string res="";
+			if(IsAssociative)
+			{
+				foreach(KeyValuePair<dynamic,dynamic> sel in DictionaryItems)
+					res+=(res.Length>0 ? "," : "") + GetValueString(sel.Key) + ":" + GetValueString(sel.Value);
+				return "{"+res+"}";
+			}
+			for(ulong i = 0;i<Count;i++)
+				res+=(i>0 ? "," : "") + GetValueString(Items[i]);
+			return "["+res+"]";
+		}
+
+		public string ToFormattedString()
+		{
+			string res="";
+			int depth=0;
+			if(IsAssociative)
+			{
+				foreach(KeyValuePair<dynamic,dynamic> sel in DictionaryItems)
+					res+="\n"+("\t".Repeat(depth))+(res.Length>0 ? "," : "") + GetFormattedValue(sel.Key) + ":" + GetFormattedValue(sel.Value);
+				return "{"+res+"\n}";
+			}
+			for(ulong i = 0;i<Count;i++)
+				res+="\n"+("\t".Repeat(depth)) + GetFormattedValue(Items[i]) + (i<Count-1 ? "," : "");
+			return "["+res+"\n]";
+		}
+
+		private static string GetFormattedValue(dynamic value, int depth=0)
+		{
+			if(value!=null)
+			{
+				Type t=((object)value).GetType();
+				string res="";
+				if(t.IsArray || t.Name.Contains("List"))
+				{
+					foreach(dynamic sel in value)
+						res+="\n"+("\t".Repeat(depth+1))+(res.Length>0 ? "," : "")+GetFormattedValue(sel.ToString(),depth+1);
+					res="["+res+"\n"+("\t".Repeat(depth-1))+"]";
+				}
+				else if(t.IsEnum || t.Name.Contains("Dictionary"))
+				{
+					foreach(dynamic sel in value)
+						res+="\n"+("\t".Repeat(depth+1))+(res.Length>0 ? "," : "") + GetValueString(sel.Key) + ":" + GetFormattedValue(sel.Value,depth+1);
+					res="{"+res+"\n"+("\t".Repeat(depth-1))+"}";
+				}
+				else
+					res=GetValueString(value);
+				return res;
+			}
+			return "null";
+		}
+
+		private static string GetValueString(dynamic value)
+		{
+			return value!=null ? (value is string ? "\""+value+"\"" : value.ToString()) : "null";
+		}
+
+		[Serializable]
+		private sealed class ArrayEnumerator:IEnumerator, ICloneable
+		{
+			private Array array;
+
+			private int index;
+
+			private int endIndex;
+
+			private int startIndex;
+
+			private int[] _indices;
+
+			private bool _complete;
+
+			public object Current
+			{
+				get
+				{
+					if(index < startIndex)
+						throw new InvalidOperationException("InvalidOperation_EnumNotStarted");
+					if(_complete)
+						throw new InvalidOperationException("InvalidOperation_EnumEnded");
+					return array.GetValue(_indices);
+				}
+			}
+
+			internal ArrayEnumerator(Array array,int index,int count)
+			{
+				this.array = array;
+				this.index = index - 1;
+				startIndex = index;
+				endIndex = index + count;
+				_indices = new int[array.Rank];
+				int num = 1;
+				for(int i = 0;i < array.Rank;i++)
+				{
+					_indices[i] = array.GetLowerBound(i);
+					num *= array.GetLength(i);
+				}
+
+				_indices[_indices.Length - 1]--;
+				_complete = num == 0;
+			}
+
+			private void IncArray()
+			{
+				int rank = array.Rank;
+				_indices[rank - 1]++;
+				for(int num = rank - 1;num >= 0;num--)
+				{
+					if(_indices[num] > array.GetUpperBound(num))
+					{
+						if(num == 0)
+						{
+							_complete = true;
+							break;
+						}
+
+						for(int i = num;i < rank;i++)
+						{
+							_indices[i] = array.GetLowerBound(i);
+						}
+
+						_indices[num - 1]++;
+					}
+				}
+			}
+
+			public object Clone()
+			{
+				return MemberwiseClone();
+			}
+
+			public bool MoveNext()
+			{
+				if(_complete)
+				{
+					index = endIndex;
+					return false;
+				}
+
+				index++;
+				IncArray();
+				return !_complete;
+			}
+
+			public void Reset()
+			{
+				index = startIndex - 1;
+				int num = 1;
+				for(int i = 0;i < array.Rank;i++)
+				{
+					_indices[i] = array.GetLowerBound(i);
+					num *= array.GetLength(i);
+				}
+
+				_complete = num == 0;
+				_indices[_indices.Length - 1]--;
+			}
+		}
+
+		public IEnumerator GetEnumerator()
+		{
+			if(IsAssociative)
+				return DictionaryItems.GetEnumerator();
+			else
+				return new ArrayEnumerator(Values,0,Length);
+			//throw new NotImplementedException();
+		}
+	}
+}

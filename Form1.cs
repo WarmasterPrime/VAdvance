@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using VAdvance.Services.Extensions.Strings;
 using VAdvance.Services.Extensions.Arrays;
+using VAdvance.DataTypes.Arrays;
+using VAdvance.DataTypes.Enumerable;
 
 namespace VAdvance
 {
@@ -18,25 +20,24 @@ namespace VAdvance
 		public Form1()
 		{
 			InitializeComponent();
-			//Write("apple-sause is always Awesome to particularly (but not acceptably) have!".Capitalize(StringModificationFlags.ByWhitespace));
-			//Write("apple-sause is always Awesome to particularly (but not acceptably) have! hello world!\n how are you today?\ni hope you're day is going well; happy!".Capitalize(StringModificationFlags.BySentence));
-
-			//string v0="Ripples";
-			//string v0="Apples";
-			//string v0="Pineapples";
-			string v0="Orion";
-			//string v0="Rain";
-			string v1="apple";
-			Write(v0.Soundex());
-			//Write(v0.Levenshtein(v1));
-
-
-
-			string[] a={
-				"apples","oranges"
+			
+			Varray l=new Varray
+			{
+				{0,"Apples" },
+				{1,"Oranges" },
+				{2,"Peaches" },
+				{10,new string[]{"origins","popcorn" } },
+				{11,new Dictionary<string,string>{{"Hello","World" } } },
+				{12,new List<string>{"Awesomeness","Hawaii" } },
+				{ "Foo","Bar" }
 			};
-			a.Push("Hello World");
-			var dt=a;
+			Write(l.ToFormattedString());
+			//Write(l.ToString());
+
+			//l.Push("Item","Value");
+			//l.Push(0,'\t');
+			//l.Push('a',3.14);
+
 		}
 
 		public void Write(dynamic q)

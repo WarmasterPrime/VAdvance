@@ -10,11 +10,11 @@ namespace VAdvance.Services.Extensions.Strings
 		/// <param name="value">Obtained from an instance of a string.</param>
 		/// <param name="repeat_limit">The number of times to repeat the value.</param>
 		/// <returns></returns>
-		public static string Repeat(this string value,uint repeat_limit)
+		public static string Repeat(this string value,int repeat_limit)
 		{
 			string res=value;
-			if(value.CheckValue()&&repeat_limit>0)
-				for(uint i=0;i<repeat_limit;i++)
+			if(value!=null && repeat_limit>0)
+				for(int i=0;i<repeat_limit;i++)
 					res+=value;
 			return res;
 		}

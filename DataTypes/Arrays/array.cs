@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -10,6 +11,7 @@ namespace VAdvance.DataTypes.Arrays
 	{
 		private dynamic[] _Keys={ };
 		private dynamic[] _Values={ };
+		public readonly Dictionary<dynamic,dynamic> Items=new Dictionary<dynamic,dynamic>();
 		private bool IsAssociative
 		{
 			get
@@ -84,7 +86,10 @@ namespace VAdvance.DataTypes.Arrays
 		/// <param name="value"></param>
 		public void Add(dynamic key,dynamic value)
 		{
-			Push(key,value);
+			if(Items.ContainsKey(key))
+				Items[key]=value;
+			else
+				Items.Add(key,value);
 		}
 		/// <summary>
 		/// Adds a new value at the end of the array.
@@ -97,6 +102,8 @@ namespace VAdvance.DataTypes.Arrays
 				Array.Resize(ref _Values,_Values.Length+1);
 				_Values[_Values.Length-1]=value;
 				RebuildKeys();
+				if(!Items.ContainsKey(Items.Count))
+					Items.Add(Items.Count, value);
 			}
 		}
 		/// <summary>
@@ -153,6 +160,8 @@ namespace VAdvance.DataTypes.Arrays
 							tmp[tmp.Length-1]=_Values[i];
 							Array.Resize(ref key_tmp,key_tmp.Length+1);
 							key_tmp[key_tmp.Length-1]=sel;
+							if(Items.ContainsKey(sel))
+								Items.Remove(Items[sel]);
 						}
 						i++;
 					}
@@ -226,7 +235,6 @@ namespace VAdvance.DataTypes.Arrays
 					res+=(i>0 ? "," : "") + GetValueString(_Keys[i]) + ":" + GetValueString(_Values[i]);
 				return "{"+res+"}";
 			}
-			var dev=_Values;
 			for(int i = 0;i<Count;i++)
 				res+=(i>0 ? "," : "") + GetValueString(_Values[i]);
 			return "["+res+"]";
@@ -240,14 +248,27 @@ namespace VAdvance.DataTypes.Arrays
 		{
 			return value!=null ? (value is string ? "\""+value+"\"" : value.ToString()) : "null";
 		}
-
-
-
-
-
-
-
-
+		/// <summary>
+		/// Gets the key-value pair associated with the value.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public KeyValuePair<dynamic,dynamic> FindByValue(dynamic value)
+		{
+			foreach(KeyValuePair<dynamic,dynamic> sel in Items)
+				if(sel.Value.Equals(value))
+					return sel;
+			return new KeyValuePair<dynamic,dynamic>(null,null);
+		}
+		/// <summary>
+		/// Clears the contents of the array.
+		/// </summary>
+		public void Clear()
+		{
+			Items.Clear();
+			Array.Clear(_Keys,0,_Keys.Length);
+			Array.Clear(_Values,0,_Values.Length);
+		}
 
 		public IEnumerator GetEnumerator()
 		{
