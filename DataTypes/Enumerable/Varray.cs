@@ -1,4 +1,34 @@
-﻿using System;
+﻿/*
+* title:						Varray
+* desc:							Provides the means to dynamically sustain a collection of items that can be converted into a JSON string based on its contents. Can provide a JSON string or array string.
+								Useful for web-based projects that need to communicate between the client and web-server.
+								Designed for holding large amounts of data.
+* author:						Daniel K. Valente
+* created:						11-25-2022
+* modified:						11-25-2022
+* version:						0.0.0.0
+* features:
+			- Automated data conversion between associative and non-associative collections.
+			- Enumerable
+			- Automated index association.
+			- Version control: References to existing properties/fields eliminate the need to adjust source code.
+* future:
+			- Provide a means to compress the collective to reduce memory usage... The option to optimize memory consumption or optimize processing usage.
+				- Basically, the developer may choose to focus on reducing memory usage at the cost of processing power, or may choose to focus on reduced processing power over memory usage.
+			- Provide a means to support dynamic collection dimensions (Arrays and Lists are single dimensions, as Dictionaries are two-dimensional).
+				- Basically, allows the developer to create and reference multi-dimensional arrays with ease without needing to specify a type or create new instances of arrays or collections.
+			- Optimize efficiency by utilizing assembly-line language to improve processing efficiency and completion time.
+			- Provide a means to generate new instances of an object or create new references to/of an object and instantiate only specific instances at specific indexes.
+			- Implement value matching with operator overloads to provide a more advanced means to determine if two or more values match a given value.
+			- Implement array/collection sorting with advanced sorting options.
+			- Implement array/collection filtering options.
+			- Store date-time information to assist with sorting/filtering features.
+			- Implement functionality of increment and decrement operators to adjust collection size with ease.
+			- Implement mathematical operators for adjusting the collection size with ease.
+			- Implement value search features to provide a means to easily locate and determine if a value exists within a given collection path.
+				- This will function similarly to how file-systems work...
+*/
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
