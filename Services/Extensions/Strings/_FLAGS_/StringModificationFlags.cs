@@ -2,7 +2,6 @@
 {
 	public enum StringModificationFlags
 	{
-		None							=0x0,
 		BySentence						=0x1,
 		ByWhitespace					=0x2,
 		BySpecialCharacter				=0x4,

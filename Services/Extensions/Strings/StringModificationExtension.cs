@@ -28,7 +28,7 @@ namespace VAdvance.Services.Extensions.Strings
 		public static string Capitalize(this string value,StringModificationFlags flags,dynamic custom_value=null)
 		{
 			string res=value;
-			if(value.CheckValue()&&flags!=StringModificationFlags.None)
+			if(value.CheckValue())
 			{
 				string rex=string.Empty;
 				if(flags>=StringModificationFlags.ByCustomCharacter&&((custom_value!=null)&&custom_value is char))

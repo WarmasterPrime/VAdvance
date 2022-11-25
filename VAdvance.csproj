@@ -61,7 +61,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Extensions\Arrays\ArrayValidationExtension.cs" />
     <Compile Include="Services\Extensions\Arrays\ArrayModificationExtension.cs" />
+    <Compile Include="Services\Extensions\Characters\CharacterModificationExtension.cs" />
+    <Compile Include="Services\Extensions\Characters\CharacterValidationExtension.cs" />
     <Compile Include="Services\Extensions\Objects\ObjectValidationExtension.cs" />
+    <Compile Include="Services\Extensions\Strings\StringLevenshteinExtension.cs" />
+    <Compile Include="Services\Extensions\Strings\Data\Soundex\SoundexReferenceData.cs" />
+    <Compile Include="Services\Extensions\Strings\StringSoundexExtension.cs" />
     <Compile Include="Services\Extensions\Strings\StringPathExtension.cs" />
     <Compile Include="Services\Extensions\Strings\StringModificationExtension.cs" />
     <Compile Include="Services\Extensions\Strings\StringValidationExtension.cs" />

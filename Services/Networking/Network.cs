@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,22 +21,15 @@ namespace VAdvance.Services.Networking
 
 		public Network() { }
 
-		public dynamic Send()
+		public async Task<dynamic> Send()
 		{
-			dynamic res=null;
-			if(Url.CheckValue() && Items.CheckValue())
-			{
-
-			}
-			return res;
+			return (await Ping(Url))==IPStatus.Success && Items.CheckValue() ? await (await new HttpClient().PostAsync(Url,new FormUrlEncodedContent(Items))).Content.ReadAsStringAsync() : null;
 		}
-
 
 		public static async Task<IPStatus> Ping(string destination, int timeout=500)
 		{
 			return destination.CheckValue() ? (await new Ping().SendPingAsync(destination,timeout)).Status : IPStatus.BadDestination;
 		}
-
 
 	}
 }
