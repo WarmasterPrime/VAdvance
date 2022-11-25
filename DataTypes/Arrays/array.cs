@@ -241,7 +241,6 @@ namespace VAdvance.DataTypes.Arrays
 			return value!=null ? (value is string ? "\""+value+"\"" : value.ToString()) : "null";
 		}
 
-<<<<<<< HEAD
 
 
 
@@ -250,8 +249,6 @@ namespace VAdvance.DataTypes.Arrays
 
 
 
-=======
->>>>>>> master
 		public IEnumerator GetEnumerator()
 		{
 			throw new NotImplementedException();
