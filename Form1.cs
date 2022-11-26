@@ -62,10 +62,8 @@ namespace VAdvance
 
 		public void DevOperation()
 		{
-			string file_name="Restricted and abandoned project.pdf";
-			Network.DownloadFile("http://doft.ddns.net/"+file_name,"C:\\Users\\Sitesupport\\Desktop\\Daniel\\Developmental\\");
-		}
 
+		}
 
 
 		public void Write(dynamic q)
