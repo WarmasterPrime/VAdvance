@@ -492,7 +492,6 @@ namespace VAdvance.DataTypes.Enumerable
 				return DictionaryItems.GetEnumerator();
 			else
 				return new ArrayEnumerator(Values,0,Length);
-			//throw new NotImplementedException();
 		}
 	}
 }
