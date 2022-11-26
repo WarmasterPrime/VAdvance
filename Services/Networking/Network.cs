@@ -14,7 +14,6 @@ namespace VAdvance.Services.Networking
 {
 	public class Network
 	{
-
 		public string Url;
 		public int Port=22;
 		public string Ip;
