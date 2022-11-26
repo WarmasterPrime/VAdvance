@@ -31,10 +31,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VAdvance.Services.Extensions.Arrays;
 using VAdvance.Services.Extensions.Objects;
 using VAdvance.Services.Extensions.Strings;
@@ -329,7 +326,10 @@ namespace VAdvance.DataTypes.Enumerable
 				res+=(i>0 ? "," : "") + GetValueString(Items[i]);
 			return "["+res+"]";
 		}
-
+		/// <summary>
+		/// Generates a formatted JSON string.
+		/// </summary>
+		/// <returns></returns>
 		public string ToFormattedString()
 		{
 			string res="";
@@ -344,7 +344,12 @@ namespace VAdvance.DataTypes.Enumerable
 				res+="\n"+("\t".Repeat(depth)) + GetFormattedValue(Items[i]) + (i<Count-1 ? "," : "");
 			return "["+res+"\n]";
 		}
-
+		/// <summary>
+		/// Creates a string representation of the value.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="depth"></param>
+		/// <returns></returns>
 		private static string GetFormattedValue(dynamic value, int depth=0)
 		{
 			if(value!=null)
@@ -369,7 +374,11 @@ namespace VAdvance.DataTypes.Enumerable
 			}
 			return "null";
 		}
-
+		/// <summary>
+		/// Creates a string representation of the value.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		private static string GetValueString(dynamic value)
 		{
 			return value!=null ? (value is string ? "\""+value+"\"" : value.ToString()) : "null";
