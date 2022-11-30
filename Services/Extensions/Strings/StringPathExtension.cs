@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Linq;
+using VAdvance.Services.Extensions.Strings.Data.FileSystem;
 
 namespace VAdvance.Services.Extensions.Strings
 {
@@ -30,6 +32,11 @@ namespace VAdvance.Services.Extensions.Strings
 		public static bool IsDir(this string value)
 		{
 			return Directory.Exists(value);
+		}
+
+		public static bool IsExecutable(this string value)
+		{
+			return value.IsFile() && Path.HasExtension(value) && FileExtensions.Executable.Contains(Path.GetExtension(value).ToLower());
 		}
 	}
 }

@@ -15,6 +15,8 @@ using VAdvance.DataTypes.Enumerable;
 using VAdvance.Services.Networking;
 using System.Net;
 using VAdvance.Services.Experimental.Assembly;
+using VAdvance.Services.Processing.Software;
+using System.Diagnostics;
 
 namespace VAdvance
 {
@@ -29,7 +31,11 @@ namespace VAdvance
 			CenterToScreen();
 
 
-			Executing();
+			//Executing();
+			Executor();
+
+			
+			//Write(p.IsExecutable());
 
 
 
@@ -67,6 +73,34 @@ namespace VAdvance
 
 		}
 
+		public async void Executor()
+		{
+			string p="C:\\Users\\sitesupport\\Desktop\\test.bat";
+			string[] l={
+				"C:\\Users\\sitesupport\\Desktop\\test.bat",
+				"C:\\Users\\sitesupport\\Desktop\\test.bat",
+				"C:\\Users\\sitesupport\\Desktop\\test.bat"
+			};
+			VProcess ins=new VProcess
+			{
+				Path=p
+			};
+			//ins.RedirectOutput+=RedirectedOutput;
+			//ins.RedirectRawOutput+=Ins_RedirectRawOutput;
+			Write(await ins.Execute());
+		}
+
+		private void Ins_RedirectRawOutput(object sender,string output)
+		{
+			Write(output,true);
+		}
+
+		public async void RedirectedOutput(object sender,DataReceivedEventArgs e)
+		{
+			await Task.Delay(100);
+			Write(e.Data,true);
+		}
+
 		public async void Executing()
 		{
 			string ip="172.20.";
@@ -89,26 +123,28 @@ namespace VAdvance
 		}
 
 
-		public void DevOperation()
-		{
-
-		}
-
-		public void Write(dynamic q)
+		public void Write(dynamic q, bool append=false)
 		{
 			if(q!=null)
 			{
-				if(q is List<string>)
-				{
+				string res=string.Empty;
+				if(q is List<string> || q is string[])
 					foreach(string s in q)
-						DevTextboxControl.Text+="\r\n"+s;
-				}
+						res+="\r\n"+s;
+				else if(q is Varray varray)
+					res=varray.ToFormattedString().Replace("\n","\r\n");
+				else if(q is bool)
+					res=q ? "TRUE" : "FALSE";
 				else
 				{
 					string value=q.ToString();
 					if(value.CheckValue())
-						DevTextboxControl.Text=Regex.Replace(value,"[\n]","\r\n");
+						res=Regex.Replace(value,"[\n]","\r\n");
 				}
+				if(append)
+					DevTextboxControl.Text+=res;
+				else
+					DevTextboxControl.Text=res;
 			}
 		}
 

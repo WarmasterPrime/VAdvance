@@ -43,13 +43,20 @@ namespace VAdvance.DataTypes.Enumerable
 
 		public readonly Dictionary<dynamic,dynamic> DictionaryItems=new Dictionary<dynamic, dynamic>();
 		private dynamic[] ListItems={ };
-		private bool IsAssociative=false;
+		private bool _IsAssociative=false;
+		public bool IsAssociative
+		{
+			get
+			{
+				return _IsAssociative;
+			}
+		}
 		
 		public dynamic[] Keys
 		{
 			get
 			{
-				return IsAssociative ? DictionaryItems.Keys.ToArray() : (dynamic)ListItems.GetKeysULong();
+				return _IsAssociative ? DictionaryItems.Keys.ToArray() : (dynamic)ListItems.GetKeysULong();
 			}
 		}
 
@@ -57,7 +64,7 @@ namespace VAdvance.DataTypes.Enumerable
 		{
 			get
 			{
-				return IsAssociative ? DictionaryItems.Values.ToArray() : ListItems;
+				return _IsAssociative ? DictionaryItems.Values.ToArray() : ListItems;
 			}
 		}
 		/// <summary>
@@ -67,7 +74,7 @@ namespace VAdvance.DataTypes.Enumerable
 		{
 			get
 			{
-				return IsAssociative ? (ulong)DictionaryItems.LongCount() : (ulong)ListItems.Length;
+				return _IsAssociative ? (ulong)DictionaryItems.LongCount() : (ulong)ListItems.Length;
 			}
 		}
 		/// <summary>
@@ -87,7 +94,7 @@ namespace VAdvance.DataTypes.Enumerable
 		{
 			get
 			{
-				if(IsAssociative)
+				if(_IsAssociative)
 					return DictionaryItems;
 				return ListItems;
 			}
@@ -101,7 +108,7 @@ namespace VAdvance.DataTypes.Enumerable
 		{
 			get
 			{
-				if(IsAssociative)
+				if(_IsAssociative)
 					return DictionaryItems.ContainsKey(index) ? DictionaryItems[index] : null;
 				return ((object)index).IsNumeric() && index>-1&&index<ListItems.Length ? ListItems[index] : null;
 			}
@@ -119,7 +126,7 @@ namespace VAdvance.DataTypes.Enumerable
 		/// <param name="value"></param>
 		public void Add(dynamic value)
 		{
-			if(IsAssociative)
+			if(_IsAssociative)
 			{
 				Array.Resize(ref ListItems,DictionaryItems.Count);
 				ulong i=0;
@@ -128,7 +135,7 @@ namespace VAdvance.DataTypes.Enumerable
 					ListItems[i]=sel.Value;
 					i++;
 				}
-				IsAssociative=false;
+				_IsAssociative=false;
 			}
 			else
 			{
@@ -144,7 +151,7 @@ namespace VAdvance.DataTypes.Enumerable
 		/// <exception cref="ArgumentException"></exception>
 		public void Add(dynamic key,dynamic value)
 		{
-			if(IsAssociative)
+			if(_IsAssociative)
 			{
 				if(!DictionaryItems.ContainsKey(key))
 					DictionaryItems.Add(key,value);
@@ -155,7 +162,7 @@ namespace VAdvance.DataTypes.Enumerable
 					Insert(key,value);
 				else
 				{
-					IsAssociative=true;
+					_IsAssociative=true;
 					DictionaryItems.Clear();
 					for(ulong i = 0;i<(ulong)ListItems.Length;i++)
 						DictionaryItems.Add(i,ListItems[i]);
@@ -173,7 +180,7 @@ namespace VAdvance.DataTypes.Enumerable
 		/// <param name="value"></param>
 		public void Insert(dynamic index,dynamic value)
 		{
-			if(!IsAssociative && ((((object)index).IsNumeric()) && index>-1))
+			if(!_IsAssociative && ((((object)index).IsNumeric()) && index>-1))
 			{
 				Array.Resize(ref ListItems,index>ListItems.Length+1 ? index+1 : ListItems.Length+1);
 				dynamic[] tmp=new dynamic[ListItems.Length];
@@ -197,7 +204,7 @@ namespace VAdvance.DataTypes.Enumerable
 		/// <param name="value"></param>
 		public void Push(dynamic value)
 		{
-			if(IsAssociative)
+			if(_IsAssociative)
 				Add(value);
 			else
 			{
@@ -223,7 +230,7 @@ namespace VAdvance.DataTypes.Enumerable
 		/// <returns></returns>
 		public bool ContainsKey(dynamic key)
 		{
-			if(IsAssociative)
+			if(_IsAssociative)
 				return DictionaryItems.ContainsKey(key);
 			return Contains(key);
 		}
@@ -234,7 +241,7 @@ namespace VAdvance.DataTypes.Enumerable
 		/// <returns></returns>
 		public bool Contains(dynamic value)
 		{
-			if(IsAssociative)
+			if(_IsAssociative)
 				return DictionaryItems.ContainsKey(value) || DictionaryItems.ContainsValue(value);
 			return ContainsValue(value);
 		}
@@ -245,7 +252,7 @@ namespace VAdvance.DataTypes.Enumerable
 		/// <returns></returns>
 		public bool ContainsValue(dynamic value)
 		{
-			if(IsAssociative)
+			if(_IsAssociative)
 				return DictionaryItems.ContainsValue(value);
 			else
 				for(int i=0;i<ListItems.Length;i++)
@@ -260,7 +267,7 @@ namespace VAdvance.DataTypes.Enumerable
 		/// <returns>the <see cref="long">index</see> of a non-associative array, or the key of the given value.</returns>
 		public dynamic IndexOf(dynamic value)
 		{
-			if(IsAssociative)
+			if(_IsAssociative)
 				foreach(KeyValuePair<dynamic,dynamic> sel in DictionaryItems)
 					if(sel.Value==value)
 						return sel;
@@ -277,7 +284,7 @@ namespace VAdvance.DataTypes.Enumerable
 		/// <returns></returns>
 		public bool RemoveKey(dynamic key)
 		{
-			return IsAssociative && DictionaryItems.Remove(key);
+			return _IsAssociative && DictionaryItems.Remove(key);
 		}
 		/// <summary>
 		/// Removes a given key or value that is located within the Varray items.
@@ -286,7 +293,7 @@ namespace VAdvance.DataTypes.Enumerable
 		/// <returns></returns>
 		public bool Remove(dynamic value)
 		{
-			if(IsAssociative)
+			if(_IsAssociative)
 				return DictionaryItems.ContainsValue(value) ? DictionaryItems.Remove(IndexOf(value)) : RemoveKey(value);
 			else if(Contains(value))
 			{
@@ -316,7 +323,7 @@ namespace VAdvance.DataTypes.Enumerable
 		public override string ToString()
 		{
 			string res="";
-			if(IsAssociative)
+			if(_IsAssociative)
 			{
 				foreach(KeyValuePair<dynamic,dynamic> sel in DictionaryItems)
 					res+=(res.Length>0 ? "," : "") + GetValueString(sel.Key) + ":" + GetValueString(sel.Value);
@@ -334,7 +341,7 @@ namespace VAdvance.DataTypes.Enumerable
 		{
 			string res="";
 			int depth=0;
-			if(IsAssociative)
+			if(_IsAssociative)
 			{
 				foreach(KeyValuePair<dynamic,dynamic> sel in DictionaryItems)
 					res+="\n"+("\t".Repeat(depth))+(res.Length>0 ? "," : "") + GetFormattedValue(sel.Key) + ":" + GetFormattedValue(sel.Value);
@@ -350,7 +357,7 @@ namespace VAdvance.DataTypes.Enumerable
 		/// <param name="value"></param>
 		/// <param name="depth"></param>
 		/// <returns></returns>
-		private static string GetFormattedValue(dynamic value, int depth=0)
+		private static string GetFormattedValue(dynamic value=null, int depth=0)
 		{
 			if(value!=null)
 			{
@@ -359,7 +366,7 @@ namespace VAdvance.DataTypes.Enumerable
 				if(t.IsArray || t.Name.Contains("List"))
 				{
 					foreach(dynamic sel in value)
-						res+="\n"+("\t".Repeat(depth+1))+(res.Length>0 ? "," : "")+GetFormattedValue(sel.ToString(),depth+1);
+						res+="\n"+("\t".Repeat(depth+1))+(res.Length>0 ? "," : "")+GetFormattedValue(sel,depth+1);
 					res="["+res+"\n"+("\t".Repeat(depth-1))+"]";
 				}
 				else if(t.IsEnum || t.Name.Contains("Dictionary"))
@@ -488,7 +495,7 @@ namespace VAdvance.DataTypes.Enumerable
 
 		public IEnumerator GetEnumerator()
 		{
-			if(IsAssociative)
+			if(_IsAssociative)
 				return DictionaryItems.GetEnumerator();
 			else
 				return new ArrayEnumerator(Values,0,Length);

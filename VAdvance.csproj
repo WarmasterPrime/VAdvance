@@ -78,6 +78,7 @@
     <Compile Include="Services\Extensions\Characters\CharacterValidationExtension.cs" />
     <Compile Include="Services\Extensions\Dynamics\DynamicValidationExtension.cs" />
     <Compile Include="Services\Extensions\Objects\ObjectValidationExtension.cs" />
+    <Compile Include="Services\Extensions\Strings\Data\FileSystem\FileExtensions.cs" />
     <Compile Include="Services\Extensions\Strings\StringMetaSoundExtension.cs" />
     <Compile Include="Services\Extensions\Strings\StringMetaphoneExtension.cs" />
     <Compile Include="Services\Extensions\Strings\StringLevenshteinExtension.cs" />
@@ -91,10 +92,12 @@
     <Compile Include="Services\Extensions\Types\TypeValidationExtension.cs" />
     <Compile Include="Services\FileSystem\Vystem.cs" />
     <Compile Include="Services\Networking\Network.cs" />
+    <Compile Include="Services\Processing\Software\VProcess.cs" />
     <Compile Include="Services\Sorting\Arrays\ArraySorter.cs" />
     <Compile Include="Services\Sorting\Data\SortingMethod.cs" />
     <Compile Include="Services\Sorting\Sorter.cs" />
     <Compile Include="Services\Sorting\Data\SortingOption.cs" />
+    <Compile Include="Services\System\EventHandlers\ProcessOutputEventHandler.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
