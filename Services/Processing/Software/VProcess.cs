@@ -63,7 +63,8 @@ namespace VAdvance.Services.Processing.Software
 							RedirectOutput=RedirectOutput,
 							RedirectRawOutput=RedirectRawOutput
 						};
-						res.Add(await ins.Execute());
+						if(RedirectRawOutput==null)
+							res.Add(await ins.Execute());
 					}
 			return res;
 		}
