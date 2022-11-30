@@ -42,6 +42,7 @@ namespace VAdvance.Services.Processing.Software
 		public event DataReceivedEventHandler RedirectOutput;
 		public event ProcessOutputEventHandler RedirectRawOutput;
 		public bool WaitForExit=true;
+		public bool UseShellExecute=false;
 
 		public VProcess()
 		{
@@ -73,26 +74,36 @@ namespace VAdvance.Services.Processing.Software
 		{
 			if(Path!=null)
 			{
+				if(!UseShellExecute)
+				{
+					RedirectOutput=RedirectRawOutput==null ? RedirectOutput??Proc_OutputDataReceived : Proc_OutputDataReceived;
+					UseShellExecute=RedirectRawOutput==null ? RedirectOutput==null : false;
+				}
 				Process proc=new Process
 				{
 					EnableRaisingEvents=true,
 					StartInfo={
-						UseShellExecute=false,
-						RedirectStandardOutput=true,
-						RedirectStandardError=true,
+						UseShellExecute=UseShellExecute,
+						RedirectStandardOutput=!UseShellExecute,
+						RedirectStandardError=!UseShellExecute,
 						FileName=Path
 					}
 				};
 				if(Arguments!=null)
 					proc.StartInfo.Arguments=Arguments;
 				proc.Exited+=Proc_Exited;
-				RedirectOutput=RedirectRawOutput==null ? RedirectOutput??Proc_OutputDataReceived : Proc_OutputDataReceived;
-				proc.OutputDataReceived+=RedirectOutput;
-				proc.ErrorDataReceived+=RedirectOutput;
+				if(!UseShellExecute)
+				{
+					proc.OutputDataReceived+=RedirectOutput;
+					proc.ErrorDataReceived+=RedirectOutput;
+				}
 				Exited=false;
 				proc.Start();
-				proc.BeginOutputReadLine();
-				proc.BeginErrorReadLine();
+				if(!UseShellExecute)
+				{
+					proc.BeginOutputReadLine();
+					proc.BeginErrorReadLine();
+				}
 				Running=true;
 				if(WaitForExit)
 				{
@@ -117,7 +128,7 @@ namespace VAdvance.Services.Processing.Software
 		private async Task<bool> WaitForProgramExit()
 		{
 			while(!Exited || Running)
-				await Task.Delay(100);
+				await Task.Delay(5);
 			return true;
 		}
 
