@@ -2,6 +2,10 @@
 {
 	public static class StringValidationExtension
 	{
+		public static readonly string[] Vowels={
+			"a","A","e","E","i","I","o","O","u","U","y","Y"
+		};
+		public static readonly string VowelsRegex="aAeEiIoOuUyY";
 		/// <summary>
 		/// Determines if the string value is usable or valid.
 		/// </summary>

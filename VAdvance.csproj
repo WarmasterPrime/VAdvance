@@ -17,12 +17,13 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -41,6 +42,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>BasicVirtmaKey.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -66,6 +70,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Experimental\Assembly\Assemblizer.cs" />
     <Compile Include="Services\Extensions\Arrays\ArrayValidationExtension.cs" />
     <Compile Include="Services\Extensions\Arrays\ArrayModificationExtension.cs" />
     <Compile Include="Services\Extensions\Arrays\ArrayInfoExtension.cs" />
@@ -73,6 +78,8 @@
     <Compile Include="Services\Extensions\Characters\CharacterValidationExtension.cs" />
     <Compile Include="Services\Extensions\Dynamics\DynamicValidationExtension.cs" />
     <Compile Include="Services\Extensions\Objects\ObjectValidationExtension.cs" />
+    <Compile Include="Services\Extensions\Strings\StringMetaSoundExtension.cs" />
+    <Compile Include="Services\Extensions\Strings\StringMetaphoneExtension.cs" />
     <Compile Include="Services\Extensions\Strings\StringLevenshteinExtension.cs" />
     <Compile Include="Services\Extensions\Strings\Data\Soundex\SoundexReferenceData.cs" />
     <Compile Include="Services\Extensions\Strings\StringSoundexExtension.cs" />
@@ -82,6 +89,7 @@
     <Compile Include="Services\Extensions\Strings\_FLAGS_\StringModificationFlags.cs" />
     <Compile Include="Services\Extensions\Types\Data\TypeNames.cs" />
     <Compile Include="Services\Extensions\Types\TypeValidationExtension.cs" />
+    <Compile Include="Services\FileSystem\Vystem.cs" />
     <Compile Include="Services\Networking\Network.cs" />
     <Compile Include="Services\Sorting\Arrays\ArraySorter.cs" />
     <Compile Include="Services\Sorting\Data\SortingMethod.cs" />

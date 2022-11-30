@@ -114,12 +114,10 @@ namespace VAdvance.Services.Networking
 			return (await Ping(destination))==IPStatus.Success;
 		}
 
-		public static async Task<IPStatus> Ping(string destination,int timeout = 500)
+		public static async Task<IPStatus> Ping(string destination,int timeout = 50)
 		{
-			return destination.CheckValue() ? (await new Ping().SendPingAsync(destination,timeout)).Status : IPStatus.BadDestination;
+			return (await new Ping().SendPingAsync(destination,timeout)).Status;
 		}
-
-
 
 
 	}

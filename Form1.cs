@@ -14,25 +14,32 @@ using VAdvance.DataTypes.Arrays;
 using VAdvance.DataTypes.Enumerable;
 using VAdvance.Services.Networking;
 using System.Net;
+using VAdvance.Services.Experimental.Assembly;
 
 namespace VAdvance
 {
 	public partial class Form1:Form
 	{
 
-		private Network NetIns;
+		private readonly Network NetIns;
 
 		public Form1()
 		{
 			InitializeComponent();
+			CenterToScreen();
 
 
-			NetIns=new Network
-			{
-				WindowIns=this
-			};
+			Executing();
 
-			DevOperation();
+
+
+
+			//NetIns=new Network
+			//{
+			//	WindowIns=this
+			//};
+
+			//DevOperation();
 
 			//NetIns.Ip=NetIns.GetDefaultGateway().ToString();
 			//NetIns.WindowIns=this;
@@ -60,19 +67,48 @@ namespace VAdvance
 
 		}
 
+		public async void Executing()
+		{
+			string ip="172.20.";
+			List<string>l=new List<string>();
+			int o=40;
+			while(o<100)
+			{
+				string tip=ip+o+".";
+				int i=40;
+				while(i<100)
+				{
+					if(await Network.Ping(tip+i.ToString(),50)==System.Net.NetworkInformation.IPStatus.Success)
+						DevTextboxControl.Text+="\r\n"+tip+i.ToString();
+					i++;
+				}
+				DevTextboxControl.Text+="-";
+				o++;
+			}
+			DevTextboxControl.Text+="\r\nCOMPLETED\r\n";
+		}
+
+
 		public void DevOperation()
 		{
 
 		}
 
-
 		public void Write(dynamic q)
 		{
 			if(q!=null)
 			{
-				string value=q.ToString();
-				if(value.CheckValue())
-					DevTextboxControl.Text=Regex.Replace(value,"[\n]","\r\n");
+				if(q is List<string>)
+				{
+					foreach(string s in q)
+						DevTextboxControl.Text+="\r\n"+s;
+				}
+				else
+				{
+					string value=q.ToString();
+					if(value.CheckValue())
+						DevTextboxControl.Text=Regex.Replace(value,"[\n]","\r\n");
+				}
 			}
 		}
 
