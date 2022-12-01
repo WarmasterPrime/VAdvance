@@ -1,4 +1,6 @@
-﻿namespace VAdvance.Services.Extensions.Strings
+﻿using System.Text.RegularExpressions;
+
+namespace VAdvance.Services.Extensions.Strings
 {
 	public static class StringValidationExtension
 	{
@@ -15,5 +17,26 @@
 		{
 			return (!string.IsNullOrEmpty(value))&&value.Trim().Length>0;
 		}
+		/// <summary>
+		/// Determines if the string consists of only numbers.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="ignore_whitespace"></param>
+		/// <returns></returns>
+		public static bool ContainsOnlyNumbers(this string value, bool ignore_whitespace=false)
+		{
+			return Regex.IsMatch(value,"[^\\d"+(ignore_whitespace ? "\\s" : "")+"]+");
+		}
+		/// <summary>
+		/// Determines if the string value consists of only numerical characters (Includes numbers, numerical symbols, and alphametical unit representations).
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="ignore_whitespace"></param>
+		/// <returns></returns>
+		public static bool ContainsOnlyNumerics(this string value, bool ignore_whitespace=false)
+		{
+			return Regex.IsMatch(value,"[^\\deE.-"+(ignore_whitespace ? "\\s" : "")+"]+");
+		}
+
 	}
 }

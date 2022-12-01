@@ -17,6 +17,11 @@ using System.Net;
 using VAdvance.Services.Experimental.Assembly;
 using VAdvance.Services.Processing.Software;
 using System.Diagnostics;
+using VAdvance.Services.Extensions.Numerics;
+using System.Media;
+using System.IO;
+using Microsoft.VisualStudio.DebuggerVisualizers;
+using VAdvance.Services.Ai.ImageDetection;
 
 namespace VAdvance
 {
@@ -31,9 +36,28 @@ namespace VAdvance
 			CenterToScreen();
 
 
-			//Executing();
-			Executor();
+			string path="C:\\Users\\sitesupport\\Desktop\\Teth-Adam.mp3";
+			//AudioPlayerControl.newMedia(path);
+			//AudioPlayerControl.URL=path;
+			path="C:\\Users\\sitesupport\\Desktop\\Daniel\\dvalente_M11_clone.png";
+			ImageControl.Image=Image.FromFile(path);
 
+			Videct ins = new Videct
+			{
+				ImageControl=ImageControl
+			};
+			ins.ProcessImage();
+
+			//DevFunc();
+
+
+			//Executing();
+			//Executor();
+
+			//string v="";
+			//Write(v.GetNumberFromRoman());
+
+			//this.FormClosed+=Form1_FormClosed;
 			
 			//Write(p.IsExecutable());
 
@@ -71,6 +95,39 @@ namespace VAdvance
 			//l.Push(0,'\t');
 			//l.Push('a',3.14);
 
+		}
+
+		public async void DevFunc()
+		{
+
+			//VisualizerDevelopmentHost ins=new VisualizerDevelopmentHost(
+
+			
+
+			/*
+			var ins=File.OpenRead("C:\\Users\\sitesupport\\Desktop\\Teth-Adam.mp3");
+			string res="";
+			for(int i = 0;i<100;i++)
+			{
+				
+				res+=(char)ins.ReadByte()+" ";
+			}
+			Write(res);
+			*/
+			/*
+			SoundPlayer ins=new SoundPlayer("C:\\Users\\sitesupport\\Desktop\\Teth-Adam.mp3");
+			ins.Load();
+			ins.PlaySync();
+			//int len=4092;
+			//byte[] arr=new byte[len];
+			//int lim=await ins.Stream.ReadAsync(arr,0,len);
+			ImageControl.Image=Image.FromStream(ins.Stream);
+			*/
+		}
+
+		private void Form1_FormClosed(object sender,FormClosedEventArgs e)
+		{
+			
 		}
 
 		public async void Executor()
@@ -121,7 +178,6 @@ namespace VAdvance
 			}
 			DevTextboxControl.Text+="\r\nCOMPLETED\r\n";
 		}
-
 
 		public void Write(dynamic q, bool append=false)
 		{

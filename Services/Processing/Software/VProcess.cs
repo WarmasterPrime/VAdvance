@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using VAdvance.DataTypes.Enumerable;
@@ -7,11 +8,17 @@ using VAdvance.Services.System.EventHandlers;
 
 namespace VAdvance.Services.Processing.Software
 {
-	public class VProcess
+	public class VProcess : Process
 	{
-
 		private string _Path;
+		private new bool Exited=false;
+		private bool Running=false;
+		private string[] Output={ };
+		private Process Proc;
 		private string[] _Paths;
+		/// <summary>
+		/// Gets or sets a list of targets (target files) that are to be executed/run.
+		/// </summary>
 		public string[] Paths
 		{
 			get
@@ -23,7 +30,9 @@ namespace VAdvance.Services.Processing.Software
 				_Paths=(value!=null) && value.Length>0 ? value : null;
 			}
 		}
-
+		/// <summary>
+		/// Gets or sets the target file path that is to be executed/run.
+		/// </summary>
 		public string Path
 		{
 			get
@@ -35,20 +44,54 @@ namespace VAdvance.Services.Processing.Software
 				_Path=value.IsFile() ? value : null;
 			}
 		}
+		/// <summary>
+		/// A string consisting of the command-line arguments to be sent to the executing process.
+		/// </summary>
 		public string Arguments;
-		private bool Exited=false;
-		private bool Running=false;
-		private string[] Output={ };
 		public event DataReceivedEventHandler RedirectOutput;
 		public event ProcessOutputEventHandler RedirectRawOutput;
-		public bool WaitForExit=true;
+		public new event VProcessDisposalEventHandler Disposed;
+		public new bool WaitForExit=true;
 		public bool UseShellExecute=false;
+		public static readonly List<VProcess> Procs=new List<VProcess>();
+		public readonly Process Current=GetCurrentProcess();
+		/// <summary>
+		/// Creates a new instance of a VProcess class object.
+		/// </summary>
+		public VProcess() { }
 
-		public VProcess()
+		private bool Contains(string name)
 		{
+			if(name.CheckValue())
+			{
 
+			}
+			return false;
 		}
 
+		/// <summary>
+		/// Shutsdown and releases all resources and operations that the process is utilizing.
+		/// </summary>
+		public new void Dispose()
+		{
+			if(Running || !Exited)
+			{
+				Proc.Close();
+				Proc.Dispose();
+			}
+		}
+		/// <summary>
+		/// Disposes all process instances (Useful for mass process termination in situations such as application termination).
+		/// </summary>
+		public static void DisposeAll()
+		{
+			foreach(VProcess sel in Procs)
+				sel.Dispose();
+		}
+		/// <summary>
+		/// Executes all valid program files within a given array of paths.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<Varray> ExecuteAll()
 		{
 			Varray res=new Varray();
@@ -69,7 +112,10 @@ namespace VAdvance.Services.Processing.Software
 					}
 			return res;
 		}
-
+		/// <summary>
+		/// Starts execution of a file asynchronously.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<dynamic> Execute()
 		{
 			if(Path!=null)
@@ -79,7 +125,7 @@ namespace VAdvance.Services.Processing.Software
 					RedirectOutput=RedirectRawOutput==null ? RedirectOutput??Proc_OutputDataReceived : Proc_OutputDataReceived;
 					UseShellExecute=RedirectRawOutput==null ? RedirectOutput==null : false;
 				}
-				Process proc=new Process
+				Proc=new Process
 				{
 					EnableRaisingEvents=true,
 					StartInfo={
@@ -90,19 +136,20 @@ namespace VAdvance.Services.Processing.Software
 					}
 				};
 				if(Arguments!=null)
-					proc.StartInfo.Arguments=Arguments;
-				proc.Exited+=Proc_Exited;
+					Proc.StartInfo.Arguments=Arguments;
+				Proc.Exited+=Proc_Exited;
 				if(!UseShellExecute)
 				{
-					proc.OutputDataReceived+=RedirectOutput;
-					proc.ErrorDataReceived+=RedirectOutput;
+					Proc.OutputDataReceived+=RedirectOutput;
+					Proc.ErrorDataReceived+=RedirectOutput;
 				}
 				Exited=false;
-				proc.Start();
+				Proc.Start();
+				Procs.Add(this);
 				if(!UseShellExecute)
 				{
-					proc.BeginOutputReadLine();
-					proc.BeginErrorReadLine();
+					Proc.BeginOutputReadLine();
+					Proc.BeginErrorReadLine();
 				}
 				Running=true;
 				if(WaitForExit)

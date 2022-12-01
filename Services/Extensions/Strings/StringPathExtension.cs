@@ -33,10 +33,29 @@ namespace VAdvance.Services.Extensions.Strings
 		{
 			return Directory.Exists(value);
 		}
-
+		/// <summary>
+		/// Determines if the string references a valid and existing executable file.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public static bool IsExecutable(this string value)
 		{
 			return value.IsFile() && Path.HasExtension(value) && FileExtensions.Executable.Contains(Path.GetExtension(value).ToLower());
+		}
+		/// <summary>
+		/// Gets the file extension of a given path.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static string GetExtension(this string value)
+		{
+			if(value.IsFile() && Path.HasExtension(value))
+			{
+				string e=Path.GetExtension(value).ToLower();
+				int num=e.IndexOf('.');
+				return e.Contains(".") ? e.Substring(num+1,e.Length-num-1) : e;
+			}
+			return value;
 		}
 	}
 }

@@ -7,6 +7,10 @@
 			".exe",".bat",".ps1"
 		};
 
+		public static readonly string[] Audio={
+			"mp3","mp2","aud","wav","ogg"
+		};
+
 		public static readonly string[] Text={
 			".txt",".tft",".doc",".page",".log",".rtf",".note",".dox",".docx"
 		};
