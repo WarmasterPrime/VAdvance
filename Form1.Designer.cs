@@ -78,6 +78,7 @@
 			this.ImageControl.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.ImageControl.TabIndex = 3;
 			this.ImageControl.TabStop = false;
+			this.ImageControl.Visible = false;
 			// 
 			// AudioPlayerControl
 			// 

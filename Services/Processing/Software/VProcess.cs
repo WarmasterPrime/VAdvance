@@ -55,6 +55,8 @@ namespace VAdvance.Services.Processing.Software
 		public bool UseShellExecute=false;
 		public static readonly List<VProcess> Procs=new List<VProcess>();
 		public readonly Process Current=GetCurrentProcess();
+		public bool CreateNoWindow=false;
+		public bool IncludeExitCode=false;
 		/// <summary>
 		/// Creates a new instance of a VProcess class object.
 		/// </summary>
@@ -105,7 +107,9 @@ namespace VAdvance.Services.Processing.Software
 							Arguments=Arguments,
 							WaitForExit=WaitForExit,
 							RedirectOutput=RedirectOutput,
-							RedirectRawOutput=RedirectRawOutput
+							RedirectRawOutput=RedirectRawOutput,
+							CreateNoWindow=CreateNoWindow,
+							IncludeExitCode=IncludeExitCode
 						};
 						if(RedirectRawOutput==null)
 							res.Add(await ins.Execute());
@@ -116,14 +120,14 @@ namespace VAdvance.Services.Processing.Software
 		/// Starts execution of a file asynchronously.
 		/// </summary>
 		/// <returns></returns>
-		public async Task<dynamic> Execute()
+		public async Task<string[]> Execute()
 		{
 			if(Path!=null)
 			{
 				if(!UseShellExecute)
 				{
 					RedirectOutput=RedirectRawOutput==null ? RedirectOutput??Proc_OutputDataReceived : Proc_OutputDataReceived;
-					UseShellExecute=RedirectRawOutput==null ? RedirectOutput==null : false;
+					UseShellExecute=RedirectRawOutput==null &&RedirectOutput==null;
 				}
 				Proc=new Process
 				{
@@ -132,7 +136,8 @@ namespace VAdvance.Services.Processing.Software
 						UseShellExecute=UseShellExecute,
 						RedirectStandardOutput=!UseShellExecute,
 						RedirectStandardError=!UseShellExecute,
-						FileName=Path
+						FileName=Path,
+						CreateNoWindow=CreateNoWindow
 					}
 				};
 				if(Arguments!=null)
@@ -155,6 +160,11 @@ namespace VAdvance.Services.Processing.Software
 				if(WaitForExit)
 				{
 					await WaitForProgramExit();
+					if(IncludeExitCode)
+					{
+						Array.Resize(ref Output,Output.Length+1);
+						Output[Output.Length-1]=Proc.ExitCode.ToString();
+					}
 					return Output;
 				}
 			}
@@ -163,13 +173,16 @@ namespace VAdvance.Services.Processing.Software
 
 		private void Proc_OutputDataReceived(object sender,DataReceivedEventArgs e)
 		{
-			if(RedirectRawOutput==null)
+			if((e!=null) && e.Data!=null)
 			{
-				Array.Resize(ref Output,Output.Length+1);
-				Output[Output.Length-1]=e.Data;
+				if(RedirectRawOutput==null)
+				{
+					Array.Resize(ref Output,Output.Length+1);
+					Output[Output.Length-1]=e.Data;
+				}
+				else
+					RedirectRawOutput(sender,e.Data);
 			}
-			else
-				RedirectRawOutput(sender,e.Data);
 		}
 
 		private async Task<bool> WaitForProgramExit()
@@ -183,6 +196,7 @@ namespace VAdvance.Services.Processing.Software
 		{
 			Exited=true;
 			Running=false;
+			Procs.Remove(this);
 		}
 	}
 }

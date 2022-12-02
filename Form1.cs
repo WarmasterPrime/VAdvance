@@ -22,6 +22,7 @@ using System.Media;
 using System.IO;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using VAdvance.Services.Ai.ImageDetection;
+using VAdvance.Services.Utilities.Applications.SystemManagement;
 
 namespace VAdvance
 {
@@ -36,19 +37,10 @@ namespace VAdvance
 			CenterToScreen();
 
 
-			string path="C:\\Users\\sitesupport\\Desktop\\Teth-Adam.mp3";
-			//AudioPlayerControl.newMedia(path);
-			//AudioPlayerControl.URL=path;
-			path="C:\\Users\\sitesupport\\Desktop\\Daniel\\dvalente_M11_clone.png";
-			ImageControl.Image=Image.FromFile(path);
 
-			Videct ins = new Videct
-			{
-				ImageControl=ImageControl
-			};
-			ins.ProcessImage();
 
-			//DevFunc();
+
+			DevFunc();
 
 
 			//Executing();
@@ -100,29 +92,8 @@ namespace VAdvance
 		public async void DevFunc()
 		{
 
-			//VisualizerDevelopmentHost ins=new VisualizerDevelopmentHost(
-
-			
-
-			/*
-			var ins=File.OpenRead("C:\\Users\\sitesupport\\Desktop\\Teth-Adam.mp3");
-			string res="";
-			for(int i = 0;i<100;i++)
-			{
-				
-				res+=(char)ins.ReadByte()+" ";
-			}
-			Write(res);
-			*/
-			/*
-			SoundPlayer ins=new SoundPlayer("C:\\Users\\sitesupport\\Desktop\\Teth-Adam.mp3");
-			ins.Load();
-			ins.PlaySync();
-			//int len=4092;
-			//byte[] arr=new byte[len];
-			//int lim=await ins.Stream.ReadAsync(arr,0,len);
-			ImageControl.Image=Image.FromStream(ins.Stream);
-			*/
+			DeepFreeze ins=new DeepFreeze(password:"ydm");
+			Write(ins.IsFrozen);
 		}
 
 		private void Form1_FormClosed(object sender,FormClosedEventArgs e)
@@ -201,6 +172,10 @@ namespace VAdvance
 					DevTextboxControl.Text+=res;
 				else
 					DevTextboxControl.Text=res;
+			}
+			else
+			{
+				DevTextboxControl.Text="[NULL]";
 			}
 		}
 

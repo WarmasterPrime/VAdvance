@@ -102,6 +102,9 @@
     <Compile Include="Services\Extensions\Types\Data\TypeNames.cs" />
     <Compile Include="Services\Extensions\Types\TypeValidationExtension.cs" />
     <Compile Include="Services\FileSystem\Vystem.cs" />
+    <Compile Include="Services\Networking\DatabaseTypeFlags.cs" />
+    <Compile Include="Services\Networking\DatabaseConfig.cs" />
+    <Compile Include="Services\Networking\Database.cs" />
     <Compile Include="Services\Networking\Network.cs" />
     <Compile Include="Services\Processing\Software\VProcess.cs">
       <SubType>Component</SubType>
@@ -115,6 +118,9 @@
     <Compile Include="Services\Systems\Informational\FileSystem\AudioFormat.cs" />
     <Compile Include="Services\Systems\Readers\Audio\AudioReader.cs" />
     <Compile Include="Services\Systems\Readers\Audio\Visualizer.cs" />
+    <Compile Include="Services\Utilities\Applications\SystemManagement\DeepFreezeBootFlags.cs" />
+    <Compile Include="Services\Utilities\Applications\SystemManagement\DeepFreeze.cs" />
+    <Compile Include="Services\Utilities\Systems\RemoteManagement\VManager.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

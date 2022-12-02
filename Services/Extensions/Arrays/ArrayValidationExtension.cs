@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using VAdvance.Services.Extensions.Strings;
 
 namespace VAdvance.Services.Extensions.Arrays
 {
@@ -13,7 +14,7 @@ namespace VAdvance.Services.Extensions.Arrays
 		/// <returns></returns>
 		public static bool CheckValue(this object[] obj)
 		{
-			return (obj!=null)&&obj.Length>0;
+			return obj is string[] v ? v.CheckValues() : (obj!=null)&&obj.Length>0;
 		}
 		/// <summary>
 		/// Determines if the dictionary set is valid and usable.
@@ -43,9 +44,18 @@ namespace VAdvance.Services.Extensions.Arrays
 		{
 			return obj!=null && value!=null ?? obj.Any((item)=>item==value);
 		}
-
-
-
+		/// <summary>
+		/// Iterates through an array of strings 
+		/// </summary>
+		/// <param name="arr"></param>
+		/// <returns></returns>
+		public static bool CheckValues(this string[] arr)
+		{
+			foreach(string sel in arr)
+				if(!sel.CheckValue())
+					return false;
+			return true;
+		}
 
 	}
 }

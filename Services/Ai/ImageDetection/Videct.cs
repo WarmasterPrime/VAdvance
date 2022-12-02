@@ -28,6 +28,7 @@ namespace VAdvance.Services.Ai.ImageDetection
 		private Bitmap Data;
 		private BitmapData BMD;
 		private Color[][][] Pixels;
+		private static readonly Color DefaultColor=Color.Red;
 		public string Path
 		{
 			get { return _Path; }
@@ -66,54 +67,43 @@ namespace VAdvance.Services.Ai.ImageDetection
 
 		}
 
-		public async void ProcessImage()
+		public void ProcessImage()
 		{
 			for(int y = 0;y<Height;y+=SectorSize*2)
 				for(int x = 0;x<Width;x+=SectorSize*2)
 					if(IsOverThreshold(x,y))
-						await SetPixelSector(x,y,SectorSize*2,SectorSize*2);
+						SetPixelSector(x,y,SectorSize*2,SectorSize*2, DefaultColor);
 			//ImageControl.Image=Image.FromHbitmap(Data.GetHbitmap());
 			ImageControl.Image=Image.FromHbitmap(Data.GetHbitmap(Color.Transparent));
 		}
-
+		//ToDo: Finish up color replacement utilizing the PixelColorCollection class to iterate through the pixels.
 		public async void ReplaceColor(Color color)
 		{
 			if(color!=null)
 			{
-				for(int y=0;y<Height;y++)
-					for(int x=0;x<Width;x++)
+
 			}
 		}
-
-
-		private async Task<bool> SetPixelSector(int x, int y, int width, int height)
+		/// <summary>
+		/// Sets/Replaces an area/sector of an image to a given color value.
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="width"></param>
+		/// <param name="height"></param>
+		/// <param name="color"></param>
+		private void SetPixelSector(int x, int y, int width, int height, Color color)
 		{
-
 			for(int i = y;i<Math.Min(height+y,Height);i++)
-			{
 				for(int o = x;o<Math.Min(width+x,Width);o++)
-				{
-					Data.SetPixel(o,i,Color.Red);
-				}
-			}
-
-			/*
-			BMD=Data.LockBits(new Rectangle(x,y,width,height),ImageLockMode.ReadWrite,Data.PixelFormat);
-			IntPtr ptr=BMD.Scan0;
-			int bytes = Math.Abs(BMD.Stride) * height;
-			byte[] rgbs=new byte[bytes];
-			Marshal.Copy(ptr,rgbs,0,bytes);
-			for(int i = 3;i<rgbs.Length;i+=3)
-			{
-				rgbs[i]=255;
-				await Task.Delay(10);
-			}
-			Marshal.Copy(rgbs,0,ptr,bytes);
-			Data.UnlockBits(BMD);
-			*/
-			return true;
+					Data.SetPixel(o,i,color);
 		}
-
+		/// <summary>
+		/// Determines if the sector value exceeds the maximum color difference threshold.
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <returns></returns>
 		private bool IsOverThreshold(int x,int y)
 		{
 			double r=0;
@@ -141,11 +131,16 @@ namespace VAdvance.Services.Ai.ImageDetection
 			}
 			return res/SectorSize*255;
 		}
-
+		/// <summary>
+		/// Calculates the pixel color index by adding all color values (red, green, and blue), then multiplies that value by the alpha percentage, then divides that value by 1,020 (255 is the maximum for each color value, but we also include the alpha color value in the total).
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <returns></returns>
 		private double GetPixelCombinedColor(int x,int y)
 		{
 			Color c=Data.GetPixel(x,y);
-			return ((double)(c.R + c.G + c.B) * (c.A/255)) / 765;
+			return ((double)(c.R + c.G + c.B) * (c.A/255)) / 1020;
 		}
 
 
