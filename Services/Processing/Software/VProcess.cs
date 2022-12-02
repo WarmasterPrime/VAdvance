@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using VAdvance.DataTypes.Enumerable;
 using VAdvance.Services.Extensions.Strings;
-using VAdvance.Services.System.EventHandlers;
+using VAdvance.Services.Systems.EventHandlers;
 
 namespace VAdvance.Services.Processing.Software
 {

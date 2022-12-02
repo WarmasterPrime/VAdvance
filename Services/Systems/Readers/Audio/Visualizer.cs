@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using AxWMPLib;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 
-namespace VAdvance.Services.System.Readers.Audio
+namespace VAdvance.Services.Systems.Readers.Audio
 {
 	public class Visualizer : DialogDebuggerVisualizer
 	{

@@ -1,4 +1,4 @@
-﻿namespace VAdvance.Services.System.Informational.FileSystem
+﻿namespace VAdvance.Services.Systems.Informational.FileSystem
 {
 	public enum AudioFormat
 	{

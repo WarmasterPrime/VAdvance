@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using VAdvance.Services.Extensions.Strings;
-using VAdvance.Services.System.Informational.FileSystem;
+using VAdvance.Services.Systems.Informational.FileSystem;
 using NAudio;
 using NAudio.Codecs;
 using NAudio.CoreAudioApi;
@@ -14,7 +14,7 @@ using NAudio.Utils;
 using NAudio.FileFormats;
 using AxWMPLib;
 
-namespace VAdvance.Services.System.Readers.Audio
+namespace VAdvance.Services.Systems.Readers.Audio
 {
 	public class AudioReader
 	{

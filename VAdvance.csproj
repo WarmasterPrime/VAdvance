@@ -77,6 +77,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Ai\ImageDetection\PixelColorItem.cs" />
+    <Compile Include="Services\Ai\ImageDetection\PixelColorCollection.cs" />
     <Compile Include="Services\Ai\ImageDetection\Videct.cs" />
     <Compile Include="Services\Experimental\Assembly\Assemblizer.cs" />
     <Compile Include="Services\Extensions\Arrays\ArrayValidationExtension.cs" />
@@ -108,11 +110,11 @@
     <Compile Include="Services\Sorting\Data\SortingMethod.cs" />
     <Compile Include="Services\Sorting\Sorter.cs" />
     <Compile Include="Services\Sorting\Data\SortingOption.cs" />
-    <Compile Include="Services\System\EventHandlers\VProcessDisposalEventHandler.cs" />
-    <Compile Include="Services\System\EventHandlers\ProcessOutputEventHandler.cs" />
-    <Compile Include="Services\System\Informational\FileSystem\AudioFormat.cs" />
-    <Compile Include="Services\System\Readers\Audio\AudioReader.cs" />
-    <Compile Include="Services\System\Readers\Audio\Visualizer.cs" />
+    <Compile Include="Services\Systems\EventHandlers\VProcessDisposalEventHandler.cs" />
+    <Compile Include="Services\Systems\EventHandlers\ProcessOutputEventHandler.cs" />
+    <Compile Include="Services\Systems\Informational\FileSystem\AudioFormat.cs" />
+    <Compile Include="Services\Systems\Readers\Audio\AudioReader.cs" />
+    <Compile Include="Services\Systems\Readers\Audio\Visualizer.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
