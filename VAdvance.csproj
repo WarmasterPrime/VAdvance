@@ -102,6 +102,7 @@
     <Compile Include="Services\Extensions\Types\Data\TypeNames.cs" />
     <Compile Include="Services\Extensions\Types\TypeValidationExtension.cs" />
     <Compile Include="Services\FileSystem\Vystem.cs" />
+    <Compile Include="Services\Networking\DatabaseCommandFlags.cs" />
     <Compile Include="Services\Networking\DatabaseTypeFlags.cs" />
     <Compile Include="Services\Networking\DatabaseConfig.cs" />
     <Compile Include="Services\Networking\Database.cs" />
