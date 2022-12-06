@@ -23,6 +23,7 @@ using System.IO;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using VAdvance.Services.Ai.ImageDetection;
 using VAdvance.Services.Utilities.Applications.SystemManagement;
+using System.Runtime.Remoting.Lifetime;
 
 namespace VAdvance
 {
@@ -31,17 +32,27 @@ namespace VAdvance
 
 		private readonly Network NetIns;
 
+		private readonly Videct DevIns=new Videct();
+
+		private Image LastImage;
+
 		public Form1()
 		{
 			InitializeComponent();
 			CenterToScreen();
 
 
+			openFileDialogControl.Multiselect=false;
+			openFileDialogControl.RestoreDirectory=true;
+			openFileDialogControl.Title="Select an image...";
+			openFileDialogControl.Filter="Image Files(*.png;*.jpeg;*.jpg;*.webp;*.gif)|*.png;*.jpeg;*.jpg;*.webp;*.gif|All files (*.*)|*.*";
 
+			LastImage=ImageControl.Image;
 
 
 			DevFunc();
 
+			
 
 			//Executing();
 			//Executor();
@@ -91,9 +102,18 @@ namespace VAdvance
 
 		public async void DevFunc()
 		{
+			ImageUploadBtnControl.Enabled=false;
+			ScanImageBtnControl.Enabled=false;
+			await Task.Delay(1);
+			DevIns.SectorSize=(int)SectorSizeInputControl.Value;
+			DevIns.Threshold=(int)ColorThresholdInputControl.Value;
+			ImageControl.Image=LastImage;
+			DevIns.ImageControl=ImageControl;
+			DevIns.ProcessImage();
 
-			DeepFreeze ins=new DeepFreeze(password:"ydm");
-			Write(ins.IsFrozen);
+			ImageUploadBtnControl.Enabled=true;
+			ScanImageBtnControl.Enabled=true;
+
 		}
 
 		private void Form1_FormClosed(object sender,FormClosedEventArgs e)
@@ -201,5 +221,55 @@ namespace VAdvance
 			await NetIns.GetSwitch(value);
 		}
 
+		private void ImageUploadBtnControl_Click(object sender=null,EventArgs e=null)
+		{
+			if(openFileDialogControl.ShowDialog() == DialogResult.OK)
+			{
+				Operation();
+				openFileDialogControl.InitializeLifetimeService();
+				openFileDialogControl.Dispose();
+			}
+		}
+
+		private async Task<bool> Operate()
+		{
+			ImageUploadBtnControl.Enabled=false;
+			ScanImageBtnControl.Enabled=false;
+
+			DevIns.SectorSize=(int)SectorSizeInputControl.Value;
+			DevIns.Threshold=(int)ColorThresholdInputControl.Value;
+			
+			ImageControl.Image.Dispose();
+			Image img=Image.FromFile(openFileDialogControl.FileName);
+			ImageControl.Image=img;
+			await Task.Delay(1);
+			if(AdvOutChkControl.Checked)
+				DevIns.ProcessImage();
+			else
+				DevIns.ImageControl=ImageControl;
+			DevIns.OutlineImage();
+			LastImage=ImageControl.Image;
+
+			img.Dispose();
+			img=null;
+			//openFileDialogControl.Reset();
+
+			
+			ImageUploadBtnControl.Enabled=true;
+			ScanImageBtnControl.Enabled=true;
+			//ImageControl.Dispose();
+			return true;
+		}
+
+		private async void Operation()
+		{
+			await Task.Delay(100);
+			await Operate();
+		}
+
+		private void ScanImageBtnControl_Click(object sender,EventArgs e)
+		{
+			Operation();
+		}
 	}
 }

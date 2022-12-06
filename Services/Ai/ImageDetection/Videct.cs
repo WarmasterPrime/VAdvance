@@ -15,20 +15,24 @@ namespace VAdvance.Services.Ai.ImageDetection
 	{
 
 		private string _Path;
-		private Color[] Items={ };
-		private ulong[] Points={ };
+		//private Color[] Items={ };
+		//private ulong[] Points={ };
 		private int Width;
 		private int Height;
 		/// <summary>
 		/// Specifies the minimum cumulative color data value that determines if the sector matches a valid color difference.
 		/// </summary>
-		public int Threshold=10;
+		public int Threshold=5;
 		public int SectorSize=3;
 		public byte MaxColorOffset=5;
 		private Bitmap Data;
-		private BitmapData BMD;
-		private Color[][][] Pixels;
+		//private BitmapData BMD;
+		//private Color[][][] Pixels;
 		private static readonly Color DefaultColor=Color.Red;
+		private double LastColorIndex=-1;
+
+		private readonly ObjectCollection Objects=new ObjectCollection();
+
 		public string Path
 		{
 			get { return _Path; }
@@ -46,10 +50,13 @@ namespace VAdvance.Services.Ai.ImageDetection
 			}
 			set
 			{
-				if((value!=null) && value.ImageLocation.CheckValue())
+				if(value!=null)
 				{
 					_ImageControl = value;
-					_Path=value.ImageLocation;
+					//_Path=value.ImageLocation.CheckPath() ? value.ImageLocation : null;
+					Path=value.ImageLocation;
+					if(Data!=null)
+						Data.Dispose();
 					Data=new Bitmap(value.Image);
 					Width=Data.Width;
 					Height=Data.Height;
@@ -62,20 +69,90 @@ namespace VAdvance.Services.Ai.ImageDetection
 			}
 		}
 
+		private int PosY=0;
+		private int PosX=0;
+
 		public Videct()
 		{
 
 		}
 
+		public async void OutlineImage()
+		{
+			await Task.Delay(1);
+			int s0=SectorSize*2;
+			for(int y = 0;y<Height;y+=s0)
+			{
+				for(int x = 0;x<Width-s0;x+=s0)
+					if(IsOverThreshold(x,y))
+						SetPixelSector(x,y,s0,s0,DefaultColor);
+				LastColorIndex=-1;
+			}
+			FinalizeImage();
+		}
+
 		public void ProcessImage()
 		{
-			for(int y = 0;y<Height;y+=SectorSize*2)
-				for(int x = 0;x<Width;x+=SectorSize*2)
+			int s0=SectorSize*2;
+			for(int y = 0;y<Height;y+=s0)
+			{
+				for(int x = 0;x<Width-s0;x+=s0)
 					if(IsOverThreshold(x,y))
-						SetPixelSector(x,y,SectorSize*2,SectorSize*2, DefaultColor);
-			//ImageControl.Image=Image.FromHbitmap(Data.GetHbitmap());
-			ImageControl.Image=Image.FromHbitmap(Data.GetHbitmap(Color.Transparent));
+						Objects.Add(x,y);
+				RenderImage();
+				LastColorIndex=-1;
+			}
+			Objects.RemoveBySize();
+			foreach(ImageObjectItem sel in Objects)
+				foreach(PixelColorItem s in sel.Items)
+					SetPixelSector((int)s.X,(int)s.Y,s0,s0,DefaultColor);
+			Objects.Clear();
+			FinalizeImage();
 		}
+
+		private async void RenderImage()
+		{
+			await Task.Delay(1);
+			if((ImageControl!=null) && !ImageControl.IsDisposed)
+				ImageControl.Image=Image.FromHbitmap(Data.GetHbitmap(Color.Transparent));
+		}
+
+		private bool IterateHeight(int increment)
+		{
+			if(PosY<Height)
+			{
+				PosY+=increment;
+				return true;
+			}
+			return false;
+		}
+
+		private bool IterateWidth(int increment)
+		{
+			if(PosX<Width)
+			{
+				PosX+=increment;
+				return true;
+			}
+			return false;
+		}
+
+
+
+		private void FinalizeImage()
+		{
+			ImageControl.Image=Image.FromHbitmap(Data.GetHbitmap(Color.Transparent));
+			ImageControl.Refresh();
+			Data.Dispose();
+			Data=null;
+			LastColorIndex=-1;
+			Width=0;
+			Height=0;
+			_Path=null;
+			_ImageControl=null;
+		}
+
+		/*
 		//ToDo: Finish up color replacement utilizing the PixelColorCollection class to iterate through the pixels.
 		public async void ReplaceColor(Color color)
 		{
@@ -84,6 +161,7 @@ namespace VAdvance.Services.Ai.ImageDetection
 
 			}
 		}
+		*/
 		/// <summary>
 		/// Sets/Replaces an area/sector of an image to a given color value.
 		/// </summary>
@@ -111,7 +189,19 @@ namespace VAdvance.Services.Ai.ImageDetection
 				for(int o=x;o<Math.Min(x+SectorSize,Data.Width-(SectorSize*2));o+=SectorSize)
 					r+=GetSectorValue(o,i);
 			r/=(SectorSize*2);
-			return r>Threshold;
+			r=(r*255)/500;
+			if(LastColorIndex<0)
+			{
+				LastColorIndex=r;
+				return false;
+			}
+			if((Math.Max(r,LastColorIndex) - Math.Min(r,LastColorIndex)) > Threshold)
+			{
+				LastColorIndex=r;
+				return true;
+			}
+			//return (Math.Max(r,LastColorIndex) - Math.Min(r,LastColorIndex)) > Threshold;
+			return false;
 		}
 		/// <summary>
 		/// Calculates the sector value by combining the color values of each pixel within the sector/matrix.

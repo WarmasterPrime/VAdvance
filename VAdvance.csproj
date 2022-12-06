@@ -41,7 +41,8 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>BasicVirtmaKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -77,6 +78,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Ai\ImageDetection\ImageObjectItem.cs" />
+    <Compile Include="Services\Ai\ImageDetection\ObjectCollection.cs" />
     <Compile Include="Services\Ai\ImageDetection\PixelColorItem.cs" />
     <Compile Include="Services\Ai\ImageDetection\PixelColorCollection.cs" />
     <Compile Include="Services\Ai\ImageDetection\Videct.cs" />
@@ -150,6 +153,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Graphics\Missing.png" />
+    <Content Include="Graphics\Processing.png" />
     <Content Include="Virtma Logo.ico" />
   </ItemGroup>
   <ItemGroup>

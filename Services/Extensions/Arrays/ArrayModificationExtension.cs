@@ -169,5 +169,12 @@ namespace VAdvance.Services.Extensions.Arrays
 			}
 			return obj;
 		}
+
+		public static string[] Clear(this string[] obj)
+		{
+			Array.Resize(ref obj,0);
+			return obj;
+		}
+		
 	}
 }
