@@ -26,8 +26,6 @@ namespace VAdvance.Services.Experimental.Assembly
 		[DllImport("Kernel32.dll")]
 		private static extern bool VirtualProtectEx(IntPtr h_proc, IntPtr lp_addr, UIntPtr dw_size, uint fl_new_protect, out uint lp_fl_old_protect);
 
-
-
 		public static byte[] Compile(string value)
 		{
 			byte[] res=new byte[] { };
@@ -64,9 +62,6 @@ namespace VAdvance.Services.Experimental.Assembly
 			}
 		}
 
-
-
-
 		private static string[] GetCaptures(CaptureCollection collection)
 		{
 			string[] res={ };
@@ -93,8 +88,6 @@ namespace VAdvance.Services.Experimental.Assembly
 			}
 			return res;
 		}
-
-
 
 		public static int Add(int first=10, int second=-15)
 		{
@@ -146,10 +139,6 @@ namespace VAdvance.Services.Experimental.Assembly
 			}
 			return res;
 		}
-
-
-
-
 
 	}
 }
