@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Ai\ImageDetection\AiNormalScan.cs" />
     <Compile Include="Services\Ai\ImageDetection\ImageObjectItem.cs" />
     <Compile Include="Services\Ai\ImageDetection\ObjectCollection.cs" />
     <Compile Include="Services\Ai\ImageDetection\PixelColorItem.cs" />

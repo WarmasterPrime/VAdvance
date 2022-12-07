@@ -10,12 +10,13 @@ namespace VAdvance.Services.Networking
 {
 	public class Database
 	{
-		public readonly DatabaseConfig Configuration=new DatabaseConfig();
-		public Varray Results;
-		public readonly Dictionary<string,dynamic> ColumnValuePairs=new Dictionary<string,dynamic>();
-		public string[] Columns;
 		private bool IsOpen=false;
 		private SqlConnection Con;
+		public readonly DatabaseConfig Configuration=new DatabaseConfig();
+		public Varray Results;
+		public readonly Dictionary<string,dynamic> Items=new Dictionary<string,dynamic>();
+		public readonly Dictionary<string,dynamic> Condition=new Dictionary<string, dynamic>();
+		public string[] Columns;
 		public DatabaseCommandFlags Action=DatabaseCommandFlags.None;
 
 		public Database() { }
@@ -49,6 +50,7 @@ namespace VAdvance.Services.Networking
 			Open();
 			string action="";
 			SqlCommand cmd=new SqlCommand(action,Con);
+			
 			Close();
 			return res;
 		}
@@ -56,12 +58,38 @@ namespace VAdvance.Services.Networking
 		private string GenerateSql()
 		{
 			string res="";
+
 			return res;
 		}
 
 		private static string GetAction(string sql)
 		{
 			return sql.CheckValue() && Regex.IsMatch(sql,"\\A^([A-z]+)") ? Regex.Match(sql,"\\A^([A-z]+)").Value : null;
+		}
+
+		private static string GetAction(DatabaseCommandFlags action)
+		{
+			switch(action)
+			{
+				case DatabaseCommandFlags.Select:
+					return "SELECT";
+				case DatabaseCommandFlags.Insert:
+					return "INSERT";
+				case DatabaseCommandFlags.Update:
+					return "UPDATE";
+				case DatabaseCommandFlags.DropDatabase:
+					return "DROP DATABASE";
+				case DatabaseCommandFlags.DropTable:
+					return "DROP TABLE";
+				case DatabaseCommandFlags.CreateTable:
+					return "CREATE TABLE";
+				case DatabaseCommandFlags.CreateDatabase:
+					return "CREATE DATABASE";
+				case DatabaseCommandFlags.AlterTable:
+					return "ALTER TABLE";
+				default:
+					return null;
+			}
 		}
 
 		private static bool HasOutput(string action)
