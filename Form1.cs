@@ -42,15 +42,15 @@ namespace VAdvance
 			CenterToScreen();
 
 
-			openFileDialogControl.Multiselect=false;
-			openFileDialogControl.RestoreDirectory=true;
-			openFileDialogControl.Title="Select an image...";
-			openFileDialogControl.Filter="Image Files(*.png;*.jpeg;*.jpg;*.webp;*.gif)|*.png;*.jpeg;*.jpg;*.webp;*.gif|All files (*.*)|*.*";
+			//openFileDialogControl.Multiselect=false;
+			//openFileDialogControl.RestoreDirectory=true;
+			//openFileDialogControl.Title="Select an image...";
+			//openFileDialogControl.Filter="Image Files(*.png;*.jpeg;*.jpg;*.webp;*.gif)|*.png;*.jpeg;*.jpg;*.webp;*.gif|All files (*.*)|*.*";
 
-			LastImage=ImageControl.Image;
+			//LastImage=ImageControl.Image;
 
 
-			DevFunc();
+			//DevFunc();
 
 			
 
@@ -78,8 +78,6 @@ namespace VAdvance
 			//NetIns.WindowIns=this;
 			//NetIns.GetSwitch();
 
-
-			/*
 			Varray l=new Varray
 			{
 				{0,"Apples" },
@@ -90,8 +88,27 @@ namespace VAdvance
 				{12,new List<string>{"Awesomeness","Hawaii" } },
 				{ "Foo","Bar" }
 			};
-			Write(l.ToFormattedString());
-			*/
+
+			dynamic[] list={
+				"Hello",
+				"World"
+			};
+
+			foreach(var sel in l)
+			{
+				var dev=sel;
+				var dev_type=dev.GetType();
+				var d=dev_type;
+			}
+
+			object test=l.GetEnumerator().Current;
+
+			var res=test is Varray;
+
+			Write(res);
+
+			//Write(l.ToFormattedString());
+			
 			//Write(l.ToString());
 
 			//l.Push("Item","Value");

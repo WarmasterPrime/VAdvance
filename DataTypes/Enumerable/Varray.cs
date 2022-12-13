@@ -406,7 +406,7 @@ namespace VAdvance.DataTypes.Enumerable
 
 			private bool _complete;
 
-			public object Current
+			public dynamic Current
 			{
 				get
 				{
@@ -465,6 +465,11 @@ namespace VAdvance.DataTypes.Enumerable
 				return MemberwiseClone();
 			}
 
+			public Varray ExactClone()
+			{
+				return (Varray)MemberwiseClone();
+			}
+
 			public bool MoveNext()
 			{
 				if(_complete)
@@ -495,10 +500,7 @@ namespace VAdvance.DataTypes.Enumerable
 
 		public IEnumerator GetEnumerator()
 		{
-			if(_IsAssociative)
-				return DictionaryItems.GetEnumerator();
-			else
-				return new ArrayEnumerator(Values,0,Length);
+			return _IsAssociative ? DictionaryItems.GetEnumerator() : (IEnumerator)new ArrayEnumerator(Values,0,Length);
 		}
 	}
 }
