@@ -41,6 +41,34 @@ namespace VAdvance.Services.FileSystem
 
 			}
 		}
+
+		public static async Task<List<string>> AsyncScan(string path)
+		{
+			//List<string> res=new List<string>();
+			//return res.ToArray();
+			return await GetDirectoryItems(path);
+		}
+
+		private static async Task<List<string>> GetDirectoryItems(string path)
+		{
+			List<string>res=new List<string>();
+			try
+			{
+				if(path.IsDir())
+				{
+					List<string> l=Directory.GetDirectories(path).ToList();
+					l.AddRange(Directory.GetFiles(path));
+					foreach(string s in l)
+						res.AddRange(await GetDirectoryItems(s));
+				}
+				else if(path.IsFile())
+					res.Add(path);
+			}
+			catch { }
+			return res;
+		}
+
+
 		/*
 		private static async Task<Varray> AsyncScanDir(string path)
 		{

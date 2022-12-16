@@ -47,6 +47,9 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=17.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -55,8 +58,13 @@
     <Reference Include="NAudio.Core, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
       <HintPath>packages\NAudio.Core.2.1.0\lib\netstandard2.0\NAudio.Core.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,6 +74,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataTypes\Arrays\array.cs" />
@@ -105,11 +114,16 @@
     <Compile Include="Services\Extensions\Strings\_FLAGS_\StringModificationFlags.cs" />
     <Compile Include="Services\Extensions\Types\Data\TypeNames.cs" />
     <Compile Include="Services\Extensions\Types\TypeValidationExtension.cs" />
+    <Compile Include="Services\FileSystem\Security\VScanner.cs" />
     <Compile Include="Services\FileSystem\Vystem.cs" />
-    <Compile Include="Services\Networking\DatabaseCommandFlags.cs" />
-    <Compile Include="Services\Networking\DatabaseTypeFlags.cs" />
-    <Compile Include="Services\Networking\DatabaseConfig.cs" />
-    <Compile Include="Services\Networking\Database.cs" />
+    <Compile Include="Services\Networking\DatabaseProcessing\DatabaseTypes.cs" />
+    <Compile Include="Services\Networking\DatabaseProcessing\DatabaseTableColumnConfig.cs" />
+    <Compile Include="Services\Networking\DatabaseProcessing\DatabaseTableConfiguration.cs" />
+    <Compile Include="Services\Networking\DatabaseProcessing\DatabaseQueryItem.cs" />
+    <Compile Include="Services\Networking\DatabaseProcessing\DatabaseCommandFlags.cs" />
+    <Compile Include="Services\Networking\DatabaseProcessing\DatabaseTypeFlags.cs" />
+    <Compile Include="Services\Networking\DatabaseProcessing\DatabaseConfig.cs" />
+    <Compile Include="Services\Networking\DatabaseProcessing\Database.cs" />
     <Compile Include="Services\Networking\Network.cs" />
     <Compile Include="Services\Processing\Software\VProcess.cs">
       <SubType>Component</SubType>
@@ -123,6 +137,7 @@
     <Compile Include="Services\Systems\Informational\FileSystem\AudioFormat.cs" />
     <Compile Include="Services\Systems\Readers\Audio\AudioReader.cs" />
     <Compile Include="Services\Systems\Readers\Audio\Visualizer.cs" />
+    <Compile Include="Services\TextProcessing\Cryptography\Vcoder.cs" />
     <Compile Include="Services\Utilities\Applications\SystemManagement\DeepFreezeBootFlags.cs" />
     <Compile Include="Services\Utilities\Applications\SystemManagement\DeepFreeze.cs" />
     <Compile Include="Services\Utilities\Systems\RemoteManagement\VManager.cs" />
@@ -138,6 +153,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="app.manifest" />
     <None Include="BasicVirtmaKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

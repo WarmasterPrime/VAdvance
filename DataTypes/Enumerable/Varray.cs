@@ -40,10 +40,18 @@ namespace VAdvance.DataTypes.Enumerable
 {
 	public class Varray : IEnumerable
 	{
-
-		public readonly Dictionary<dynamic,dynamic> DictionaryItems=new Dictionary<dynamic, dynamic>();
 		private dynamic[] ListItems={ };
 		private bool _IsAssociative=false;
+
+		public readonly Dictionary<dynamic,dynamic> DictionaryItems=new Dictionary<dynamic, dynamic>();
+
+		public bool ForceKeyType				=false;
+		public bool ForceValueType				=false;
+		public bool ForcePairTypes				=false;
+		
+		public Type KeyType;
+		public Type ValueType;
+
 		public bool IsAssociative
 		{
 			get

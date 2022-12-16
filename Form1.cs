@@ -24,6 +24,8 @@ using Microsoft.VisualStudio.DebuggerVisualizers;
 using VAdvance.Services.Ai.ImageDetection;
 using VAdvance.Services.Utilities.Applications.SystemManagement;
 using System.Runtime.Remoting.Lifetime;
+using VAdvance.Services.FileSystem;
+using VAdvance.Services.TextProcessing.Cryptography;
 
 namespace VAdvance
 {
@@ -52,6 +54,12 @@ namespace VAdvance
 
 			//DevFunc();
 
+			//DevFuncOne();
+			Vcoder ins=new Vcoder();
+			string v="Hello World";
+			string res=ins.Encode(v);
+			Write(res);
+
 			
 
 			//Executing();
@@ -77,7 +85,7 @@ namespace VAdvance
 			//NetIns.Ip=NetIns.GetDefaultGateway().ToString();
 			//NetIns.WindowIns=this;
 			//NetIns.GetSwitch();
-
+			/*
 			Varray l=new Varray
 			{
 				{0,"Apples" },
@@ -106,7 +114,7 @@ namespace VAdvance
 			var res=test is Varray;
 
 			Write(res);
-
+			*/
 			//Write(l.ToFormattedString());
 			
 			//Write(l.ToString());
@@ -115,6 +123,74 @@ namespace VAdvance
 			//l.Push(0,'\t');
 			//l.Push('a',3.14);
 
+		}
+
+		public async void DevFuncOne()
+		{
+			DevTextboxControl.TextChanged+=DevTextboxControl_TextChanged;
+			string path="D:\\";
+			//string[] l=Directory.GetDirectories(path,"*.*",SearchOption.AllDirectories);
+			await Task.Delay(100);
+			var dtc=DateTime.Now;
+			List<string> l=await Vystem.AsyncScan(path);
+			labelControl_DebugLabel.Text=l.Count.ToString()+" Time: "+(new DateTime(DateTime.Now.Ticks-dtc.Ticks)).ToString("HH:mm:ss");;
+			await Task.Delay(100);
+			//Write(l);
+			string look="D:\\SteamLibrary\\steamapps\\common\\Streets of Rage 4\\data\\62470333.wem";
+			await Task.Delay(100);
+			Write(l.Contains(look));
+			labelControl_DebugLabel.Text=l.Count.ToString()+" | COMPLETED | Time: "+(new DateTime(DateTime.Now.Ticks-dtc.Ticks)).ToString("HH:mm:ss");
+			//string data="";
+			/*
+			ulong i=0;
+			foreach(string s in l)
+			{
+				data+="\r\n"+s;
+				i++;
+				if(i%(ulong)(l.Count/100)==0)
+				{
+					DevTextboxControl.Text+=data;
+					data="";
+					await Task.Delay(1);
+				}
+			}
+			*/
+			
+			//await Task.Delay(100);
+			//DevTextboxControl.Text=data;
+			/*
+			DevTextboxControl.TextChanged+=DevTextboxControl_TextChanged;
+			await Task.Delay(100);
+			var dtc=DateTime.Now;
+			ulong i=0;
+			string data="";
+			foreach(string dir in l)
+			{
+				//await AsyncWrite(DevTextboxControl,"\n"+dir,true);
+				//Write("\n"+dir,true);
+				data+="\r\n"+dir;
+				i++;
+				//DateTime dt=new DateTime(DateTime.Now.Ticks-dtc.Ticks);
+				//labelControl_DebugLabel.Text=i.ToString()+" Time: "+(new DateTime(DateTime.Now.Ticks-dtc.Ticks)).ToString("HH:mm:ss");
+				if(i%10000==0)
+				{
+					labelControl_DebugLabel.Text=i.ToString()+" / "+l.Length+" | Time: "+(new DateTime(DateTime.Now.Ticks-dtc.Ticks)).ToString("HH:mm:ss");
+					DevTextboxControl.Text+=data;
+					data="";
+					await Task.Delay(1);
+				}
+			}
+			labelControl_DebugLabel.Text=i.ToString()+" Time: "+(new DateTime(DateTime.Now.Ticks-dtc.Ticks)).ToString("HH:mm:ss");
+			//Write(data);
+			//labelControl_DebugLabel.Text+=" Time: "+(DateTime.Now-dtc).ToString("H:mm:ss");
+			*/
+		}
+
+		private void DevTextboxControl_TextChanged(object sender,EventArgs e)
+		{
+			TextBox elm=(TextBox)sender;
+			elm.SelectionStart=elm.TextLength;
+			elm.ScrollToCaret();
 		}
 
 		public async void DevFunc()
@@ -185,6 +261,35 @@ namespace VAdvance
 				o++;
 			}
 			DevTextboxControl.Text+="\r\nCOMPLETED\r\n";
+		}
+
+		public async Task<bool> AsyncWrite(TextBox elm,dynamic q,bool append = false)
+		{
+			if(q!=null)
+			{
+				string res=string.Empty;
+				if(q is List<string> || q is string[])
+					foreach(string s in q)
+						res+="\r\n"+s;
+				else if(q is Varray varray)
+					res=varray.ToFormattedString().Replace("\n","\r\n");
+				else if(q is bool)
+					res=q ? "TRUE" : "FALSE";
+				else
+				{
+					string value=q.ToString();
+					if(value.CheckValue())
+						res=Regex.Replace(value,"[\n]","\r\n");
+				}
+				if(append)
+					elm.Text+=res;
+				else
+					elm.Text=res;
+			}
+			else
+				elm.Text="[NULL]";
+			await Task.Delay(1);
+			return true;
 		}
 
 		public void Write(dynamic q, bool append=false)

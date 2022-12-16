@@ -1,4 +1,4 @@
-﻿namespace VAdvance.Services.Networking
+﻿namespace VAdvance.Services.Networking.DatabaseProcessing
 {
 	public enum DatabaseTypeFlags
 	{

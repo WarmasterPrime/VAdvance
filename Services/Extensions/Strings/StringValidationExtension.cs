@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace VAdvance.Services.Extensions.Strings
 {
@@ -36,6 +37,37 @@ namespace VAdvance.Services.Extensions.Strings
 		public static bool ContainsOnlyNumerics(this string value, bool ignore_whitespace=false)
 		{
 			return Regex.IsMatch(value,"[^\\deE.-"+(ignore_whitespace ? "\\s" : "")+"]+");
+		}
+		/// <summary>
+		/// Determines if the string value contains at least one of the items within the array of string values.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="values"></param>
+		/// <returns></returns>
+		public static bool ContainsAny(this string value, string[] values)
+		{
+			if(values!=null)
+				foreach(string sel in values)
+					if((sel!=null) && value.Contains(sel))
+						return true;
+			return false;
+		}
+		/// <summary>
+		/// Determines if the string value contains all of the values provided within the array of strings.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="values"></param>
+		/// <returns></returns>
+		public static bool ContainsAll(this string value, string[] values)
+		{
+			if((values!=null) && values.Length>0 && value.CheckValue())
+			{
+				foreach(string sel in values)
+					if((sel!=null) && !value.Contains(sel))
+						return false;
+				return true;
+			}
+			return false;
 		}
 
 	}

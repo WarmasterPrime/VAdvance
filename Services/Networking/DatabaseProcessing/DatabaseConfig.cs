@@ -1,7 +1,7 @@
 ﻿using VAdvance.Services.Extensions.Arrays;
 using VAdvance.Services.Extensions.Strings;
 
-namespace VAdvance.Services.Networking
+namespace VAdvance.Services.Networking.DatabaseProcessing
 {
 	public class DatabaseConfig
 	{

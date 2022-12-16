@@ -45,6 +45,7 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.ColorThresholdInputControl = new System.Windows.Forms.NumericUpDown();
 			this.AdvOutChkControl = new System.Windows.Forms.CheckBox();
+			this.labelControl_DebugLabel = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.ImageControl)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.AudioPlayerControl)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.SectorSizeInputControl)).BeginInit();
@@ -205,11 +206,21 @@
 			this.AdvOutChkControl.Text = "Advanced Outlining";
 			this.AdvOutChkControl.UseVisualStyleBackColor = true;
 			// 
+			// labelControl_DebugLabel
+			// 
+			this.labelControl_DebugLabel.AutoSize = true;
+			this.labelControl_DebugLabel.Location = new System.Drawing.Point(496, 440);
+			this.labelControl_DebugLabel.Name = "labelControl_DebugLabel";
+			this.labelControl_DebugLabel.Size = new System.Drawing.Size(35, 13);
+			this.labelControl_DebugLabel.TabIndex = 13;
+			this.labelControl_DebugLabel.Text = "label3";
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1102, 498);
+			this.Controls.Add(this.labelControl_DebugLabel);
 			this.Controls.Add(this.AdvOutChkControl);
 			this.Controls.Add(this.ColorThresholdInputControl);
 			this.Controls.Add(this.label2);
@@ -250,6 +261,7 @@
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.NumericUpDown ColorThresholdInputControl;
 		private System.Windows.Forms.CheckBox AdvOutChkControl;
+		private System.Windows.Forms.Label labelControl_DebugLabel;
 	}
 }
 

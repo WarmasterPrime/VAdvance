@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using VAdvance.DataTypes.Enumerable;
 using VAdvance.Services.Extensions.Strings;
 
-namespace VAdvance.Services.Networking
+namespace VAdvance.Services.Networking.DatabaseProcessing
 {
 	public class Database
 	{
