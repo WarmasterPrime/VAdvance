@@ -26,6 +26,7 @@ using VAdvance.Services.Utilities.Applications.SystemManagement;
 using System.Runtime.Remoting.Lifetime;
 using VAdvance.Services.FileSystem;
 using VAdvance.Services.TextProcessing.Cryptography;
+using VAdvance.Services.Systems.Microsoft.Windows;
 
 namespace VAdvance
 {
@@ -43,35 +44,8 @@ namespace VAdvance
 			InitializeComponent();
 			CenterToScreen();
 
-
-			//openFileDialogControl.Multiselect=false;
-			//openFileDialogControl.RestoreDirectory=true;
-			//openFileDialogControl.Title="Select an image...";
-			//openFileDialogControl.Filter="Image Files(*.png;*.jpeg;*.jpg;*.webp;*.gif)|*.png;*.jpeg;*.jpg;*.webp;*.gif|All files (*.*)|*.*";
-
-			//LastImage=ImageControl.Image;
-
-
-			//DevFunc();
-
-			//DevFuncOne();
-			Vcoder ins=new Vcoder();
-			string v="Hello World";
-			string res=ins.Encode(v);
-			Write(res);
-
 			
-
-			//Executing();
-			//Executor();
-
-			//string v="";
-			//Write(v.GetNumberFromRoman());
-
-			//this.FormClosed+=Form1_FormClosed;
-			
-			//Write(p.IsExecutable());
-
+			DevFuncTwo();
 
 
 
@@ -123,6 +97,16 @@ namespace VAdvance
 			//l.Push(0,'\t');
 			//l.Push('a',3.14);
 
+		}
+
+		public async void DevFuncTwo()
+		{
+			Capture=true;
+			await Task.Delay(1000);
+			WindowsOs.DisableMouse();
+			await Task.Delay(6000);
+			WindowsOs.EnableMouse();
+			Capture=false;
 		}
 
 		public async void DevFuncOne()

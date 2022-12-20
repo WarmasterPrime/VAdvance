@@ -62,6 +62,13 @@ namespace VAdvance.Services.Networking.DatabaseProcessing
 			return res;
 		}
 
+		private string GenerateWheres()
+		{
+			string res="";
+			
+			return res;
+		}
+
 		private static string GetAction(string sql)
 		{
 			return sql.CheckValue() && Regex.IsMatch(sql,"\\A^([A-z]+)") ? Regex.Match(sql,"\\A^([A-z]+)").Value : null;

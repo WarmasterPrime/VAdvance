@@ -15,7 +15,10 @@ namespace VAdvance.Services.Extensions.Objects
 
 		public static bool CheckValue(this object value)
 		{
-			return (value!=null) && (value.GetType().Name.Contains("Dictionary") || value.GetType().Name.Contains("List")) ? ((dynamic)value).Count>0 : (value.GetType().Name=="String" &&(!string.IsNullOrEmpty((string)value))&&((string)value).Trim().Length>0);
+			if(value is string)
+				return Strings.StringValidationExtension.CheckValue((string)value);
+			else
+				return (value!=null) && (value.GetType().Name.Contains("Dictionary") || value.GetType().Name.Contains("List")) ? ((dynamic)value).Count>0 : (value.GetType().Name=="String" &&(!string.IsNullOrEmpty((string)value))&&((string)value).Trim().Length>0);
 		}
 
 		public static bool IsNumeric(this object value)

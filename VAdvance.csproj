@@ -116,6 +116,7 @@
     <Compile Include="Services\Extensions\Types\TypeValidationExtension.cs" />
     <Compile Include="Services\FileSystem\Security\VScanner.cs" />
     <Compile Include="Services\FileSystem\Vystem.cs" />
+    <Compile Include="Services\Networking\DatabaseProcessing\DatabaseQueryItemExtensions.cs" />
     <Compile Include="Services\Networking\DatabaseProcessing\DatabaseTypes.cs" />
     <Compile Include="Services\Networking\DatabaseProcessing\DatabaseTableColumnConfig.cs" />
     <Compile Include="Services\Networking\DatabaseProcessing\DatabaseTableConfiguration.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Services\Networking\DatabaseProcessing\DatabaseConfig.cs" />
     <Compile Include="Services\Networking\DatabaseProcessing\Database.cs" />
     <Compile Include="Services\Networking\Network.cs" />
+    <Compile Include="Services\Processing\Rendering\VRender.cs" />
     <Compile Include="Services\Processing\Software\VProcess.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -132,9 +134,13 @@
     <Compile Include="Services\Sorting\Data\SortingMethod.cs" />
     <Compile Include="Services\Sorting\Sorter.cs" />
     <Compile Include="Services\Sorting\Data\SortingOption.cs" />
+    <Compile Include="Services\Systems\EventHandlers\KeyboardEventHandlers.cs" />
     <Compile Include="Services\Systems\EventHandlers\VProcessDisposalEventHandler.cs" />
     <Compile Include="Services\Systems\EventHandlers\ProcessOutputEventHandler.cs" />
     <Compile Include="Services\Systems\Informational\FileSystem\AudioFormat.cs" />
+    <Compile Include="Services\Systems\Microsoft\Windows\Peripherals\Input\KeyboardDevice.cs" />
+    <Compile Include="Services\Systems\Microsoft\Windows\Peripherals\Input\MouseCursor.cs" />
+    <Compile Include="Services\Systems\Microsoft\Windows\WindowsOs.cs" />
     <Compile Include="Services\Systems\Readers\Audio\AudioReader.cs" />
     <Compile Include="Services\Systems\Readers\Audio\Visualizer.cs" />
     <Compile Include="Services\TextProcessing\Cryptography\Vcoder.cs" />
@@ -194,6 +200,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Services\Extensions\Perihperals\" />
     <Folder Include="Services\Processing\Image\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
