@@ -44,8 +44,9 @@ namespace VAdvance
 			InitializeComponent();
 			CenterToScreen();
 
-			
-			DevFuncTwo();
+			Write(Environment.MachineName);
+
+			//DevFuncTwo();
 
 
 
@@ -101,12 +102,7 @@ namespace VAdvance
 
 		public async void DevFuncTwo()
 		{
-			Capture=true;
-			await Task.Delay(1000);
-			WindowsOs.DisableMouse();
-			await Task.Delay(6000);
-			WindowsOs.EnableMouse();
-			Capture=false;
+			
 		}
 
 		public async void DevFuncOne()

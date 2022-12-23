@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CB1FE380-72CF-4B5E-BD5C-13C3823D7EF7}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>VAdvance</RootNamespace>
     <AssemblyName>VAdvance</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -47,9 +47,7 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=17.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -62,6 +60,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xaml" />
@@ -100,6 +99,7 @@
     <Compile Include="Services\Extensions\Characters\CharacterModificationExtension.cs" />
     <Compile Include="Services\Extensions\Characters\CharacterValidationExtension.cs" />
     <Compile Include="Services\Extensions\Dynamics\DynamicValidationExtension.cs" />
+    <Compile Include="Services\Extensions\Numerics\SizeSuffixExtension.cs" />
     <Compile Include="Services\Extensions\Numerics\NumericRomanConversionExtension.cs" />
     <Compile Include="Services\Extensions\Objects\ObjectValidationExtension.cs" />
     <Compile Include="Services\Extensions\Strings\Data\FileSystem\FileExtensions.cs" />
@@ -138,6 +138,15 @@
     <Compile Include="Services\Systems\EventHandlers\VProcessDisposalEventHandler.cs" />
     <Compile Include="Services\Systems\EventHandlers\ProcessOutputEventHandler.cs" />
     <Compile Include="Services\Systems\Informational\FileSystem\AudioFormat.cs" />
+    <Compile Include="Services\Systems\Informational\FileSystem\SizeSuffixer.cs" />
+    <Compile Include="Services\Systems\Microsoft\Windows\StorageDriveFormatTypes.cs" />
+    <Compile Include="Services\Systems\Microsoft\Windows\StorageDriveTypes.cs" />
+    <Compile Include="Services\Systems\Microsoft\Windows\StorageDriveItem.cs" />
+    <Compile Include="Services\Systems\Microsoft\Windows\StorageDriveInformation.cs" />
+    <Compile Include="Services\Systems\Microsoft\Windows\ResponseConverter.cs" />
+    <Compile Include="Services\Systems\Microsoft\Windows\GraphicsInformation.cs" />
+    <Compile Include="Services\Systems\Microsoft\Windows\ProcessorInformation.cs" />
+    <Compile Include="Services\Systems\Microsoft\Windows\SystemInformation.cs" />
     <Compile Include="Services\Systems\Microsoft\Windows\Peripherals\Input\KeyboardDevice.cs" />
     <Compile Include="Services\Systems\Microsoft\Windows\Peripherals\Input\MouseCursor.cs" />
     <Compile Include="Services\Systems\Microsoft\Windows\WindowsOs.cs" />

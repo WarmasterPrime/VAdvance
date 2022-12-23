@@ -17,7 +17,8 @@ namespace VAdvance.Services.Extensions.Types
 			"ulong",
 			"long",
 			"float",
-			"double"
+			"double",
+			"decimal"
 		};
 	}
 }
