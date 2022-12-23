@@ -2,6 +2,7 @@
 
 namespace VAdvance.Services.Extensions.Strings
 {
+
 	public static class StringValidationExtension
 	{
 		public static readonly string[] Vowels={
