@@ -5,8 +5,8 @@
 								Designed for holding large amounts of data.
 * author:						Daniel K. Valente
 * created:						11-25-2022
-* modified:						11-25-2022
-* version:						0.0.0.0
+* modified:						12-29-2022
+* version:						0.0.0.1
 * features:
 			- Automated data conversion between associative and non-associative collections.
 			- Enumerable
@@ -23,15 +23,15 @@
 			- Implement array/collection sorting with advanced sorting options.
 			- Implement array/collection filtering options.
 			- Store date-time information to assist with sorting/filtering features.
-			- Implement functionality of increment and decrement operators to adjust collection size with ease.
-			- Implement mathematical operators for adjusting the collection size with ease.
-			- Implement value search features to provide a means to easily locate and determine if a value exists within a given collection path.
+			- Implement mathematical operators for adjusting the collection size with ease. (You don't need to, it's automatically resized!)
+			- Implement value search features to provide a means to easily locate and determine if a value exists within a given collection path. (Already done?).
 				- This will function similarly to how file-systems work...
 */
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using VAdvance.Services.Extensions.Arrays;
 using VAdvance.Services.Extensions.Objects;
 using VAdvance.Services.Extensions.Strings;
@@ -42,15 +42,29 @@ namespace VAdvance.DataTypes.Enumerable
 	{
 		private dynamic[] ListItems={ };
 		private bool _IsAssociative=false;
+		private bool _Terminate;
+		private bool _IsDisposed;
 
 		public readonly Dictionary<dynamic,dynamic> DictionaryItems=new Dictionary<dynamic, dynamic>();
-
 		public bool ForceKeyType				=false;
 		public bool ForceValueType				=false;
 		public bool ForcePairTypes				=false;
-		
 		public Type KeyType;
 		public Type ValueType;
+		public bool IsDisposed
+		{
+			get
+			{
+				return _IsDisposed;
+			}
+		}
+		public bool Terminate
+		{
+			get
+			{
+				return _Terminate;
+			}
+		}
 
 		public bool IsAssociative
 		{
@@ -116,17 +130,43 @@ namespace VAdvance.DataTypes.Enumerable
 		{
 			get
 			{
+				if(IsDisposed)
+					throw new InvalidOperationException(VarrayExceptionMessages.Disposed);
 				if(_IsAssociative)
 					return DictionaryItems.ContainsKey(index) ? DictionaryItems[index] : null;
 				return ((object)index).IsNumeric() && index>-1&&index<ListItems.Length ? ListItems[index] : null;
 			}
 			set
 			{
+				if(IsDisposed)
+					throw new InvalidOperationException(VarrayExceptionMessages.Disposed);
 				if(((object)index).IsNumeric())
 					Insert(index,value);
 				else
 					Add(index,value);
 			}
+		}
+		/// <summary>
+		/// Releases the resources being used by this instance of the Varray class object.
+		/// </summary>
+		public async void Dispose()
+		{
+			if(!IsDisposed)
+			{
+				await TerminateProcesses();
+				Clear();
+				_IsDisposed=true;
+			}
+		}
+		/// <summary>
+		/// Terminates the all processes currently being conducted by this instance of the Varray class object.
+		/// </summary>
+		public async Task<bool> TerminateProcesses()
+		{
+			_Terminate=true;
+			await Task.Delay(100);
+			_Terminate=false;
+			return true;
 		}
 		/// <summary>
 		/// Adds a new value to the array.
@@ -140,6 +180,8 @@ namespace VAdvance.DataTypes.Enumerable
 				ulong i=0;
 				foreach(KeyValuePair<dynamic,dynamic> sel in DictionaryItems)
 				{
+					if(Terminate)
+						break;
 					ListItems[i]=sel.Value;
 					i++;
 				}
@@ -159,26 +201,24 @@ namespace VAdvance.DataTypes.Enumerable
 		/// <exception cref="ArgumentException"></exception>
 		public void Add(dynamic key,dynamic value)
 		{
-			if(_IsAssociative)
-			{
-				if(!DictionaryItems.ContainsKey(key))
-					DictionaryItems.Add(key,value);
-			}
+			if(_IsAssociative && (!DictionaryItems.ContainsKey(key)))
+				DictionaryItems.Add(key,value);
+			else if (((object)key).IsNumeric())
+				Insert(key,value);
 			else
 			{
-				if(((object)key).IsNumeric())
-					Insert(key,value);
-				else
+				_IsAssociative=true;
+				DictionaryItems.Clear();
+				for(ulong i = 0;i<(ulong)ListItems.Length;i++)
 				{
-					_IsAssociative=true;
-					DictionaryItems.Clear();
-					for(ulong i = 0;i<(ulong)ListItems.Length;i++)
-						DictionaryItems.Add(i,ListItems[i]);
-					if(!DictionaryItems.ContainsKey(key))
-						DictionaryItems.Add(key,value);
-					else
-						throw new ArgumentException("The specified key already exists within the dictionary.");
+					if(Terminate)
+						break;
+					DictionaryItems.Add(i, ListItems[i]);
 				}
+				if(!DictionaryItems.ContainsKey(key))
+					DictionaryItems.Add(key,value);
+				else
+					throw new ArgumentException("The specified key already exists within the dictionary.");
 			}
 		}
 		/// <summary>
@@ -195,6 +235,8 @@ namespace VAdvance.DataTypes.Enumerable
 				int offset=0;
 				for(int i=0;i<ListItems.Length;i++)
 				{
+					if(Terminate)
+						break;
 					if(i==index)
 					{
 						tmp[i]=value;
@@ -238,9 +280,7 @@ namespace VAdvance.DataTypes.Enumerable
 		/// <returns></returns>
 		public bool ContainsKey(dynamic key)
 		{
-			if(_IsAssociative)
-				return DictionaryItems.ContainsKey(key);
-			return Contains(key);
+			return _IsAssociative ? DictionaryItems.ContainsKey(key) : Contains(key);
 		}
 		/// <summary>
 		/// Determines if the value exists within the array.
@@ -249,9 +289,7 @@ namespace VAdvance.DataTypes.Enumerable
 		/// <returns></returns>
 		public bool Contains(dynamic value)
 		{
-			if(_IsAssociative)
-				return DictionaryItems.ContainsKey(value) || DictionaryItems.ContainsValue(value);
-			return ContainsValue(value);
+			return _IsAssociative ? (DictionaryItems.ContainsKey(value) || DictionaryItems.ContainsValue(value)) : ContainsValue(value);
 		}
 		/// <summary>
 		/// Determines if the value exists within the array.
@@ -263,9 +301,13 @@ namespace VAdvance.DataTypes.Enumerable
 			if(_IsAssociative)
 				return DictionaryItems.ContainsValue(value);
 			else
-				for(int i=0;i<ListItems.Length;i++)
+				for(int i = 0;i<ListItems.Length;i++)
+				{
+					if(Terminate)
+						break;
 					if(ListItems[i]==value)
 						return true;
+				}
 			return false;
 		}
 		/// <summary>
@@ -276,13 +318,21 @@ namespace VAdvance.DataTypes.Enumerable
 		public dynamic IndexOf(dynamic value)
 		{
 			if(_IsAssociative)
-				foreach(KeyValuePair<dynamic,dynamic> sel in DictionaryItems)
+				foreach(KeyValuePair<dynamic, dynamic> sel in DictionaryItems)
+				{
+					if(Terminate)
+						break;
 					if(sel.Value==value)
 						return sel;
+				}
 			else
-				for(long i=0;i<ListItems.Length;i++)
+				for(long i = 0;i<ListItems.Length;i++)
+				{
+					if(Terminate)
+						return -1;
 					if(ListItems[i]==value)
 						return i;
+				}
 			return -1;
 		}
 		/// <summary>
@@ -307,11 +357,15 @@ namespace VAdvance.DataTypes.Enumerable
 			{
 				dynamic[] tmp={ };
 				foreach(dynamic sel in ListItems)
+				{
+					if(Terminate)
+						break;
 					if(sel!=value)
 					{
-						Array.Resize(ref tmp,tmp.Length+1);
+						Array.Resize(ref tmp, tmp.Length+1);
 						tmp[tmp.Length-1]=sel;
 					}
+				}
 				return true;
 			}
 			return false;
@@ -334,11 +388,19 @@ namespace VAdvance.DataTypes.Enumerable
 			if(_IsAssociative)
 			{
 				foreach(KeyValuePair<dynamic,dynamic> sel in DictionaryItems)
-					res+=(res.Length>0 ? "," : "") + GetValueString(sel.Key) + ":" + GetValueString(sel.Value);
+				{
+					if(Terminate)
+						break;
+					res +=(res.Length > 0 ? "," : "") + GetValueString(sel.Key) + ":" + GetValueString(sel.Value);
+				}
 				return "{"+res+"}";
 			}
 			for(ulong i = 0;i<Count;i++)
+			{
+				if(Terminate)
+					break;
 				res+=(i>0 ? "," : "") + GetValueString(Items[i]);
+			}
 			return "["+res+"]";
 		}
 		/// <summary>
@@ -351,12 +413,20 @@ namespace VAdvance.DataTypes.Enumerable
 			int depth=0;
 			if(_IsAssociative)
 			{
-				foreach(KeyValuePair<dynamic,dynamic> sel in DictionaryItems)
+				foreach(KeyValuePair<dynamic, dynamic> sel in DictionaryItems)
+				{
+					if(Terminate)
+						break;
 					res+="\n"+("\t".Repeat(depth))+(res.Length>0 ? "," : "") + GetFormattedValue(sel.Key) + ":" + GetFormattedValue(sel.Value);
+				}
 				return "{"+res+"\n}";
 			}
 			for(ulong i = 0;i<Count;i++)
+			{
+				if(Terminate)
+					break;
 				res+="\n"+("\t".Repeat(depth)) + GetFormattedValue(Items[i]) + (i<Count-1 ? "," : "");
+			}
 			return "["+res+"\n]";
 		}
 		/// <summary>
@@ -371,15 +441,15 @@ namespace VAdvance.DataTypes.Enumerable
 			{
 				Type t=((object)value).GetType();
 				string res="";
-				if(t.IsArray || t.Name.Contains("List"))
+				if(t.IsArray || (t.Name.Contains("List") || (value is Varray) && !value.IsAssociative))
 				{
 					foreach(dynamic sel in value)
 						res+="\n"+("\t".Repeat(depth+1))+(res.Length>0 ? "," : "")+GetFormattedValue(sel,depth+1);
 					res="["+res+"\n"+("\t".Repeat(depth-1))+"]";
 				}
-				else if(t.IsEnum || t.Name.Contains("Dictionary"))
+				else if(t.IsEnum || t.Name.Contains("Dictionary") || ((value is Varray) && value.IsAssociative))
 				{
-					foreach(dynamic sel in value)
+					foreach(KeyValuePair<dynamic,dynamic> sel in value)
 						res+="\n"+("\t".Repeat(depth+1))+(res.Length>0 ? "," : "") + GetValueString(sel.Key) + ":" + GetFormattedValue(sel.Value,depth+1);
 					res="{"+res+"\n"+("\t".Repeat(depth-1))+"}";
 				}
@@ -439,7 +509,6 @@ namespace VAdvance.DataTypes.Enumerable
 					_indices[i] = array.GetLowerBound(i);
 					num *= array.GetLength(i);
 				}
-
 				_indices[_indices.Length - 1]--;
 				_complete = num == 0;
 			}
@@ -449,7 +518,6 @@ namespace VAdvance.DataTypes.Enumerable
 				int rank = array.Rank;
 				_indices[rank - 1]++;
 				for(int num = rank - 1;num >= 0;num--)
-				{
 					if(_indices[num] > array.GetUpperBound(num))
 					{
 						if(num == 0)
@@ -457,15 +525,10 @@ namespace VAdvance.DataTypes.Enumerable
 							_complete = true;
 							break;
 						}
-
 						for(int i = num;i < rank;i++)
-						{
 							_indices[i] = array.GetLowerBound(i);
-						}
-
 						_indices[num - 1]++;
 					}
-				}
 			}
 
 			public object Clone()
@@ -485,7 +548,6 @@ namespace VAdvance.DataTypes.Enumerable
 					index = endIndex;
 					return false;
 				}
-
 				index++;
 				IncArray();
 				return !_complete;
@@ -500,7 +562,6 @@ namespace VAdvance.DataTypes.Enumerable
 					_indices[i] = array.GetLowerBound(i);
 					num *= array.GetLength(i);
 				}
-
 				_complete = num == 0;
 				_indices[_indices.Length - 1]--;
 			}
@@ -508,7 +569,10 @@ namespace VAdvance.DataTypes.Enumerable
 
 		public IEnumerator GetEnumerator()
 		{
-			return _IsAssociative ? DictionaryItems.GetEnumerator() : (IEnumerator)new ArrayEnumerator(Values,0,Length);
+			return _IsAssociative ? (IEnumerator)DictionaryItems.GetEnumerator() : new ArrayEnumerator(Values, 0, Length);
 		}
+
+
+
 	}
 }

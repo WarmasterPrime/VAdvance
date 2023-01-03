@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CB1FE380-72CF-4B5E-BD5C-13C3823D7EF7}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>VAdvance</RootNamespace>
     <AssemblyName>VAdvance</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -53,9 +53,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.DebuggerVisualizers.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio.Core, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>packages\NAudio.Core.2.1.0\lib\netstandard2.0\NAudio.Core.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -77,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataTypes\Arrays\array.cs" />
+    <Compile Include="DataTypes\Enumerable\VarrayExceptionMessages.cs" />
     <Compile Include="DataTypes\Enumerable\Varray.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -116,6 +114,7 @@
     <Compile Include="Services\Extensions\Types\TypeValidationExtension.cs" />
     <Compile Include="Services\FileSystem\Security\VScanner.cs" />
     <Compile Include="Services\FileSystem\Vystem.cs" />
+    <Compile Include="Services\LocationServices\GeoLocation.cs" />
     <Compile Include="Services\Networking\DatabaseProcessing\DatabaseQueryItemExtensions.cs" />
     <Compile Include="Services\Networking\DatabaseProcessing\DatabaseTypes.cs" />
     <Compile Include="Services\Networking\DatabaseProcessing\DatabaseTableColumnConfig.cs" />
@@ -150,7 +149,6 @@
     <Compile Include="Services\Systems\Microsoft\Windows\Peripherals\Input\KeyboardDevice.cs" />
     <Compile Include="Services\Systems\Microsoft\Windows\Peripherals\Input\MouseCursor.cs" />
     <Compile Include="Services\Systems\Microsoft\Windows\WindowsOs.cs" />
-    <Compile Include="Services\Systems\Readers\Audio\AudioReader.cs" />
     <Compile Include="Services\Systems\Readers\Audio\Visualizer.cs" />
     <Compile Include="Services\TextProcessing\Cryptography\Vcoder.cs" />
     <Compile Include="Services\Utilities\Applications\SystemManagement\DeepFreezeBootFlags.cs" />

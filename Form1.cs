@@ -60,7 +60,7 @@ namespace VAdvance
 			//NetIns.Ip=NetIns.GetDefaultGateway().ToString();
 			//NetIns.WindowIns=this;
 			//NetIns.GetSwitch();
-			/*
+			
 			Varray l=new Varray
 			{
 				{0,"Apples" },
@@ -69,27 +69,16 @@ namespace VAdvance
 				{10,new string[]{"origins","popcorn" } },
 				{11,new Dictionary<string,string>{{"Hello","World" } } },
 				{12,new List<string>{"Awesomeness","Hawaii" } },
+				{13,new Varray{
+					{"TEST",new Varray{
+						{ "Hello", "World" },
+						{"Apples","Oranges" }
+					}}
+				} },
 				{ "Foo","Bar" }
 			};
-
-			dynamic[] list={
-				"Hello",
-				"World"
-			};
-
-			foreach(var sel in l)
-			{
-				var dev=sel;
-				var dev_type=dev.GetType();
-				var d=dev_type;
-			}
-
-			object test=l.GetEnumerator().Current;
-
-			var res=test is Varray;
-
-			Write(res);
-			*/
+			Write(l.ToFormattedString());
+			
 			//Write(l.ToFormattedString());
 			
 			//Write(l.ToString());
