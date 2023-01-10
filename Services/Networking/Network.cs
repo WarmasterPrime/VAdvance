@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using VAdvance.Services.Extensions.Objects;
 using VAdvance.Services.Extensions.Strings;
+using VAdvance.Services.Processing.Software;
 
 namespace VAdvance.Services.Networking
 {
@@ -99,6 +102,25 @@ namespace VAdvance.Services.Networking
 				new WebClient().DownloadFileAsync(url,(save_to_dir.Substring(save_to_dir.Length-1,1)!="/" ? save_to_dir+"/" : save_to_dir) + Uri.UnescapeDataString(url.Segments[url.Segments.Length-1]));
 			}
 		}
+		/// <summary>
+		/// Downloads a file from a given URL, and saves the downloaded content within a specified local file system directory.
+		/// </summary>
+		/// <remarks>Awaits for the download to complete.</remarks>
+		/// <param name="url">The URL, web address, hostname, or network path pointing to the file to be downloaded from.</param>
+		/// <param name="save_to_dir">The local file path</param>
+		/// <returns></returns>
+		public static async Task<bool> AsyncDownloadFile(string url, string save_to_dir)
+		{
+			if(url.CheckValue())
+			{
+				if(!save_to_dir.IsDir())
+					Directory.CreateDirectory(save_to_dir);
+				Uri _url=new Uri(url);
+				await new WebClient().DownloadFileTaskAsync(_url, (save_to_dir.Substring(save_to_dir.Length-1, 1)!="/" ? save_to_dir+"/" : save_to_dir) + Uri.UnescapeDataString(_url.Segments[_url.Segments.Length-1]));
+				return true;
+			}
+			return false;
+		}
 
 		public static void UploadFile(string destination,string file_path)
 		{
@@ -119,6 +141,36 @@ namespace VAdvance.Services.Networking
 			return (await new Ping().SendPingAsync(destination,timeout)).Status;
 		}
 
+		public static async void RemoveProfile(string name)
+		{
+			if(name.CheckValue())
+			{
+				VProcess ins = new VProcess
+				{
+					Path="C:\\Windows\\system32\\cmd.exe",
+					Arguments="/C netsh wlan delete profile name=\""+name+"\""
+				};
+				await ins.Execute();
+			}
+		}
+
+		public static async Task<string[]> GetProfiles()
+		{
+			VProcess ins=new VProcess
+			{
+				Path="C:\\Windows\\system32\\cmd.exe",
+				Arguments="/C netsh wlan show profile"
+			};
+			string[] l=await ins.Execute();
+			string[] res={ };
+			foreach(string s in l)
+				if(s.Contains(": "))
+				{
+					Array.Resize(ref res,res.Length+1);
+					res[res.Length-1]=Regex.Match(s,"[\\s]+\\:[\\s]+(.+)").Groups[1].Value;
+				}
+			return res;
+		}
 
 	}
 }

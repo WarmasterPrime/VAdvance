@@ -44,54 +44,17 @@ namespace VAdvance
 			InitializeComponent();
 			CenterToScreen();
 
-			Write(Environment.MachineName);
-
-			//DevFuncTwo();
-
-
-
-			//NetIns=new Network
-			//{
-			//	WindowIns=this
-			//};
-
-			//DevOperation();
-
-			//NetIns.Ip=NetIns.GetDefaultGateway().ToString();
-			//NetIns.WindowIns=this;
-			//NetIns.GetSwitch();
-			
-			Varray l=new Varray
-			{
-				{0,"Apples" },
-				{1,"Oranges" },
-				{2,"Peaches" },
-				{10,new string[]{"origins","popcorn" } },
-				{11,new Dictionary<string,string>{{"Hello","World" } } },
-				{12,new List<string>{"Awesomeness","Hawaii" } },
-				{13,new Varray{
-					{"TEST",new Varray{
-						{ "Hello", "World" },
-						{"Apples","Oranges" }
-					}}
-				} },
-				{ "Foo","Bar" }
-			};
-			Write(l.ToFormattedString());
-			
-			//Write(l.ToFormattedString());
-			
-			//Write(l.ToString());
-
-			//l.Push("Item","Value");
-			//l.Push(0,'\t');
-			//l.Push('a',3.14);
+			DevFuncTwo();
 
 		}
 
 		public async void DevFuncTwo()
 		{
-			
+			string[] y=await Network.GetProfiles();
+			string t="";
+			foreach(string s in y)
+				t+="\n\n"+s+"\n\n";
+			Write(t);
 		}
 
 		public async void DevFuncOne()

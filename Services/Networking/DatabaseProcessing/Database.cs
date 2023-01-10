@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using VAdvance.DataTypes.Enumerable;
 using VAdvance.Services.Extensions.Strings;
+using System.Data.Linq;
+using System.Data.Linq.Mapping;
 
 namespace VAdvance.Services.Networking.DatabaseProcessing
 {

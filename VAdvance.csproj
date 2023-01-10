@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CB1FE380-72CF-4B5E-BD5C-13C3823D7EF7}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>VAdvance</RootNamespace>
     <AssemblyName>VAdvance</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -57,6 +57,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Management" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -154,6 +155,11 @@
     <Compile Include="Services\Utilities\Applications\SystemManagement\DeepFreezeBootFlags.cs" />
     <Compile Include="Services\Utilities\Applications\SystemManagement\DeepFreeze.cs" />
     <Compile Include="Services\Utilities\Systems\RemoteManagement\VManager.cs" />
+    <Compile Include="UHMC_VLabDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UHMC_VLabDataSet.xsd</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -178,6 +184,17 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="UHMC_VLabDataSet.xsc">
+      <DependentUpon>UHMC_VLabDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="UHMC_VLabDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>UHMC_VLabDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UHMC_VLabDataSet.xss">
+      <DependentUpon>UHMC_VLabDataSet.xsd</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -208,6 +225,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\Extensions\Perihperals\" />
+    <Folder Include="Services\Networking\DatabaseProcessing\Dev\" />
     <Folder Include="Services\Processing\Image\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

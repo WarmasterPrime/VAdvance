@@ -1,5 +1,7 @@
 ﻿using VAdvance.Services.Extensions.Arrays;
 using VAdvance.Services.Extensions.Strings;
+using System.Data.Linq;
+using System.Data.Linq.Mapping;
 
 namespace VAdvance.Services.Networking.DatabaseProcessing
 {
@@ -12,6 +14,9 @@ namespace VAdvance.Services.Networking.DatabaseProcessing
 		private uint _Port=1433;
 		private string _ConnectionString;
 		private DatabaseTypeFlags _DatabaseType=DatabaseTypeFlags.Sql;
+
+		//private DataContext _DataContext			=new DataContext(@"C:\linqtest5\
+
 		public string Host
 		{
 			get{return _Host;}
