@@ -109,14 +109,15 @@ namespace VAdvance.Services.Networking
 		/// <param name="url">The URL, web address, hostname, or network path pointing to the file to be downloaded from.</param>
 		/// <param name="save_to_dir">The local file path</param>
 		/// <returns></returns>
-		public static async Task<bool> AsyncDownloadFile(string url, string save_to_dir)
+		public static async Task<bool> AsyncDownloadFile(string url, string save_to_dir, string file_name=null)
 		{
 			if(url.CheckValue())
 			{
 				if(!save_to_dir.IsDir())
 					Directory.CreateDirectory(save_to_dir);
 				Uri _url=new Uri(url);
-				await new WebClient().DownloadFileTaskAsync(_url, (save_to_dir.Substring(save_to_dir.Length-1, 1)!="/" ? save_to_dir+"/" : save_to_dir) + Uri.UnescapeDataString(_url.Segments[_url.Segments.Length-1]));
+				string fn=file_name??Uri.UnescapeDataString(_url.Segments[_url.Segments.Length-1]);
+				await new WebClient().DownloadFileTaskAsync(_url, (save_to_dir.Substring(save_to_dir.Length-1, 1)!="/" ? save_to_dir+"/" : save_to_dir) + file_name);
 				return true;
 			}
 			return false;
